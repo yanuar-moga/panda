@@ -1,1 +1,379 @@
-FOOOOLLL
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PANDA - Pemetaan Anak melalui Diagnostik Awal</title>
+  
+  <!-- Manifest & PWA Support -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#00539C">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  
+  <!-- Font Google Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="./assets/css/main.css">
+  
+  <!-- SweetAlert2 Library -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+  <!-- HEADER APLIKASI -->
+  <header style="background-color: var(--md-surface); border-bottom: 1px solid var(--md-surface-variant); padding: 16px; sticky; top: 0; z-index: 100;">
+    <div style="max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" alt="Logo PANDA" style="height: 40px; width: auto; object-fit: contain;">
+        <div>
+          <h1 style="font-size: 18px; font-weight: 800; color: var(--md-primary); letter-spacing: -0.5px; line-height: 1;">PANDA</h1>
+          <span style="font-size: 11px; color: var(--md-on-surface-variant); font-weight: 500;">Pemetaan Diagnostik Awal</span>
+        </div>
+      </div>
+      <span style="font-size: 12px; font-weight: 700; background-color: var(--md-primary-container); color: var(--md-on-primary-container); padding: 4px 10px; border-radius: 20px;">v1.0</span>
+    </div>
+  </header>
+
+  <!-- FORM UTAMA -->
+  <main class="panda-container" style="margin-top: 16px;">
+    
+    <!-- Kartu Sambutan -->
+    <div class="md-card" style="background-color: var(--md-primary-container); color: var(--md-on-primary-container); border: none;">
+      <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px;">Halo, Selamat Datang!</h2>
+      <p style="font-size: 14px; opacity: 0.9; line-height: 1.5;">Silakan isi formulir diagnostik awal ini dengan sejujur-jujurnya. Data ini akan sangat membantu Bapak/Ibu guru dalam merancang metode belajar yang paling menyenangkan buat kamu!</p>
+    </div>
+
+    <form id="formDiagnostik" autocomplete="off">
+      
+      <!-- KELOMPOK I: IDENTITAS SISWA -->
+      <div class="md-card">
+        <div class="md-title">Identitas Diri</div>
+        <div class="md-subtitle">Masukkan data diri kamu secara lengkap dan benar.</div>
+        
+        <div class="form-group">
+          <label class="form-label" for="nama">Nama Lengkap</label>
+          <input type="text" id="nama" class="form-control" placeholder="Contoh: Muhammad Andi" required>
+        </div>
+        
+        <div class="form-group">
+          <label class="form-label" for="nisn">NISN (10 Digit Nomor Induk)</label>
+          <input type="number" id="nisn" class="form-control" placeholder="Contoh: 0123456789" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="kelas">Kelas</label>
+          <select id="kelas" class="form-control" style="appearance: none; background-image: radial-gradient(circle, var(--md-on-surface) 10%, transparent 11%);" required>
+            <option value="" disabled selected>Pilih kelas kamu...</option>
+            <option value="7A">7A</option>
+            <option value="7B">7B</option>
+            <option value="8A">8A</option>
+            <option value="8B">8B</option>
+            <option value="9A">9A</option>
+            <option value="9B">9B</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Jenis Kelamin</label>
+          <div class="radio-tile-group">
+            <input type="radio" id="jk_l" name="jenis_kelamin" value="Laki-Laki" style="display: none;" checked required>
+            <label for="jk_l" class="radio-tile-label">Laki-Laki</label>
+            
+            <input type="radio" id="jk_p" name="jenis_kelamin" value="Perempuan" style="display: none;">
+            <label for="jk_p" class="radio-tile-label">Perempuan</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="umur">Umur (Tahun)</label>
+          <input type="number" id="umur" class="form-control" placeholder="Contoh: 14" required>
+        </div>
+      </div>
+
+      <!-- KELOMPOK II: AKSES GAWAI & FASILITAS -->
+      <div class="md-card">
+        <div class="md-title">Kepemilikan Media Komunikasi</div>
+        <div class="md-subtitle">Fasilitas komunikasi untuk penunjang belajar dari rumah.</div>
+        
+        <div class="form-group">
+          <label class="form-label">Apakah kamu memiliki nomor WhatsApp mandiri di HP pribadi?</label>
+          <div class="radio-tile-group">
+            <input type="radio" id="wa_ya" name="kepemilikan_wa" value="Ya" style="display: none;" checked required>
+            <label for="wa_ya" class="radio-tile-label">Ya, Punya Sendiri</label>
+            
+            <input type="radio" id="wa_tidak" name="kepemilikan_wa" value="Tidak" style="display: none;">
+            <label for="wa_tidak" class="radio-tile-label">Tidak, Gabung Orang Tua/Tidak Ada</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- KELOMPOK III: ASPEK GAYA BELAJAR VAK -->
+      <div class="md-card">
+        <div class="md-title">Cara & Gaya Belajar</div>
+        <div class="md-subtitle">Pilih situasi yang paling menggambarkan kebiasaan kamu sehari-hari.</div>
+        
+        <div class="form-group">
+          <label class="form-label">Bagaimana cara kamu yang paling mudah dalam mengingat informasi/materi pelajaran?</label>
+          <div class="radio-tile-group">
+            <input type="radio" id="v_vak" name="cara_belajar" value="Visual" style="display: none;" checked required>
+            <label for="v_vak" class="radio-tile-label">Melihat Gambar, Diagram, Infografis, atau Membaca Buku Tekstual</label>
+            
+            <input type="radio" id="a_vak" name="cara_belajar" value="Auditori" style="display: none;">
+            <label for="a_vak" class="radio-tile-label">Mendengarkan Penjelasan Guru, Diskusi, Kelompok, atau Rekaman Audio</label>
+            
+            <input type="radio" id="k_vak" name="cara_belajar" value="Kinestetik" style="display: none;">
+            <label for="k_vak" class="radio-tile-label">Mempraktikkan Langsung, Melakukan Eksperimen, atau Belajar Sambil Bergerak</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- KELOMPOK IV: MINAT, PSIKOSOSIAL & ORANG TUA -->
+      <div class="md-card">
+        <div class="md-title">Minat & Kondisi Sosial Ekonomi</div>
+        <div class="md-subtitle">Profil pelengkap asuhan dan hobi.</div>
+
+        <div class="form-group">
+          <label class="form-label" for="hobi">Hobi Dominan kamu</label>
+          <input type="text" id="hobi" class="form-control" placeholder="Contoh: Sepakbola, Menggambar, Gaming" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="cita_cita">Cita-Cita Masa Depan</label>
+          <input type="text" id="cita_cita" class="form-control" placeholder="Contoh: Guru, Dokter, Programmer" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pelajaran_favorit">Mata Pelajaran yang Paling Disukai</label>
+          <input type="text" id="pelajaran_favorit" class="form-control" placeholder="Contoh: Matematika, IPA" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pelajaran_tidak_disukai">Mata Pelajaran yang Kurang Disukai</label>
+          <input type="text" id="pelajaran_tidak_disukai" class="form-control" placeholder="Berikan alasan singkat jika ada" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="ekstrakurikuler">Rencana Ekstrakurikuler yang Diikuti</label>
+          <input type="text" id="ekstrakurikuler" class="form-control" placeholder="Contoh: Pramuka, PMR, Basket" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="riwayat_penyakit">Apakah memiliki riwayat penyakit bawaan/khusus?</label>
+          <input type="text" id="riwayat_penyakit" class="form-control" placeholder="Tulis '-' jika tidak ada penyakit khusus" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pendidikan_ayah">Pendidikan Terakhir Ayah</label>
+          <input type="text" id="pendidikan_ayah" class="form-control" placeholder="Contoh: SMA, S1, SMP" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pendidikan_ibu">Pendidikan Terakhir Ibu</label>
+          <input type="text" id="pendidikan_ibu" class="form-control" placeholder="Contoh: SMA, D3" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pekerjaan_ayah">Pekerjaan Utama Ayah</label>
+          <input type="text" id="pekerjaan_ayah" class="form-control" placeholder="Contoh: Karyawan Swasta, Buruh, Guru" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="pekerjaan_ibu">Pekerjaan Utama Ibu</label>
+          <input type="text" id="pekerjaan_ibu" class="form-control" placeholder="Contoh: Ibu Rumah Tangga, Pedagang" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Apakah memiliki Kartu Indonesia Pintar (KIP)?</label>
+          <div class="radio-tile-group">
+            <input type="radio" id="kip_ya" name="kepemilikan_kip" value="Ya" style="display: none;" required>
+            <label for="kip_ya" class="radio-tile-label">Ya, Memiliki</label>
+            
+            <input type="radio" id="kip_tidak" name="kepemilikan_kip" value="Tidak" style="display: none;" checked>
+            <label for="kip_tidak" class="radio-tile-label">Tidak Memiliki</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="status_yatim_piatu">Status Kelengkapan Keluarga</label>
+          <select id="status_yatim_piatu" class="form-control" required>
+            <option value="Lengkap" selected>Orang Tua Lengkap</option>
+            <option value="Yatim">Yatim (Ayah Meninggal)</option>
+            <option value="Piatu">Piatu (Ibu Meninggal)</option>
+            <option value="Yatim Piatu">Yatim Piatu (Kedua Orang Tua Meninggal)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="aktivitas_motivasi">Hal yang paling membuat kamu termotivasi untuk belajar?</label>
+          <input type="text" id="aktivitas_motivasi" class="form-control" placeholder="Contoh: Pujian, Hadiah, Ingin Juara" required>
+        </div>
+      </div>
+
+      <!-- TOMBOL SUBMIT -->
+      <button type="submit" class="btn-primary" id="btnSubmit" style="margin-bottom: 32px;">Kirim Data Diagnostik</button>
+    </form>
+  </main>
+
+  <!-- NAVIGATION BAR BOTTOM -->
+  <nav class="bottom-nav">
+    <a href="./index.html" class="nav-item active">
+      <div class="nav-icon">📝</div>
+      <span>Form Isian</span>
+    </a>
+    <a href="./dashboard.html" class="nav-item">
+      <div class="nav-icon">📊</div>
+      <span>Statistik</span>
+    </a>
+    <a href="./guru.html" class="nav-item">
+      <div class="nav-icon">👨‍🏫</div>
+      <span>Guru</span>
+    </a>
+    <a href="./walikelas.html" class="nav-item">
+      <div class="nav-icon">📋</div>
+      <span>Wali Kelas</span>
+    </a>
+    <a href="./admin.html" class="nav-item">
+      <div class="nav-icon">⚙️</div>
+      <span>Admin</span>
+    </a>
+  </nav>
+
+  <!-- FOOTER -->
+  <footer id="appFooter" style="text-align: center; padding: 24px 16px; font-size: 12px; color: var(--md-on-surface-variant); cursor: pointer; transition: var(--transition-smooth); margin-bottom: 60px;">
+    &copy; 2026 PANDA Application. Hak Cipta Dilindungi.
+  </footer>
+
+  <!-- SCRIPT HANDLING REST API BRIDGING -->
+  <script src="./assets/js/api.js"></script>
+  <script>
+    // PWA Service Worker Registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+          .then(reg => console.log('PWA Service Worker sukses terpasang.', reg.scope))
+          .catch(err => console.error('PWA Service Worker gagal.', err));
+      });
+    }
+
+    // Modal Tentang Aplikasi via SweetAlert2 saat Footer diklik
+    document.getElementById("appFooter").addEventListener("click", () => {
+      Swal.fire({
+        title: '<strong>PANDA App</strong>',
+        html: `
+          <div style="text-align: center;">
+            <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" style="height:70px; margin-bottom:12px;">
+            <p><b>Pemetaan Anak melalui Diagnostik Awal</b></p>
+            <p style="font-size:13px; margin-top:8px; color:var(--md-on-surface-variant);">
+              Versi: 1.0 (Build 02 Juli 2026)<br>
+              Developer: MB<br>
+              Kontak: <a href="mailto:yanuar.b@gmail.com" style="color:#00539C; text-decoration:none;">yanuar.b@gmail.com</a>
+            </p>
+          </div>
+        `,
+        confirmButtonText: 'Tutup',
+        confirmButtonColor: '#00539C',
+        customClass: {
+          popup: 'md-card'
+        }
+      });
+    });
+
+    // Form Submit Event Handler
+    document.getElementById("formDiagnostik").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      
+      const startTime = performance.now();
+      
+      // Ambil Letak Koordinat GPS Siswa (Browser Geolocation API)
+      let gpsData = { latitude: "-", longitude: "-", accuracy: "-", status: "Ditolak/Tidak Didukung" };
+      if (navigator.geolocation) {
+        const getGPS = () => new Promise((resolve) => {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => resolve({ latitude: pos.coords.latitude, longitude: pos.coords.longitude, accuracy: pos.coords.accuracy, status: "Sukses" }),
+            () => resolve({ latitude: "-", longitude: "-", accuracy: "-", status: "Izin Ditolak" }),
+            { timeout: 5000 }
+          );
+        });
+        gpsData = await getGPS();
+      }
+
+      // Hitung Durasi Pengisian
+      const endTime = performance.now();
+      const durationSeconds = Math.round((endTime - startTime) / 1000) + 12; // Ditambah perkiraan pengisian manual
+
+      // Susun Payload Objek Siswa
+      const dataSiswa = {
+        timestamp: new Date().toISOString(),
+        nama: document.getElementById("nama").value,
+        nisn: document.getElementById("nisn").value,
+        kelas: document.getElementById("kelas").value,
+        jenis_kelamin: document.querySelector('input[name="jenis_kelamin"]:checked').value,
+        umur: document.getElementById("umur").value,
+        kepemilikan_wa: document.querySelector('input[name="kepemilikan_wa"]:checked').value,
+        cara_belajar: document.querySelector('input[name="cara_belajar"]:checked').value,
+        hobi: document.getElementById("hobi").value,
+        cita_cita: document.getElementById("cita_cita").value,
+        pelajaran_favorit: document.getElementById("pelajaran_favorit").value,
+        pelajaran_tidak_disukai: document.getElementById("pelajaran_tidak_disukai").value,
+        ekstrakurikuler: document.getElementById("ekstrakurikuler").value,
+        riwayat_penyakit: document.getElementById("riwayat_penyakit").value,
+        pendidikan_ayah: document.getElementById("pendidikan_ayah").value,
+        pendidikan_ibu: document.getElementById("pendidikan_ibu").value,
+        pekerjaan_ayah: document.getElementById("pekerjaan_ayah").value,
+        pekerjaan_ibu: document.getElementById("pekerjaan_ibu").value,
+        kepemilikan_kip: document.querySelector('input[name="kepemilikan_kip"]:checked').value,
+        status_yatim_piatu: document.getElementById("status_yatim_piatu").value,
+        aktivitas_motivasi: document.getElementById("aktivitas_motivasi").value
+      };
+
+      // Susun Payload Metadata Tracking Teknis
+      const trackingData = {
+        session_id: "SESS_" + Math.random().toString(36).substr(2, 9).toUpperCase(),
+        responden_id: "RESP_" + dataSiswa.nisn,
+        nama: dataSiswa.nama,
+        kelas: dataSiswa.kelas,
+        browser: navigator.userAgentData ? navigator.userAgentData.brands[0].brand : navigator.appName,
+        sistem_operasi: navigator.platform,
+        device: window.innerWidth < 768 ? "Mobile/HP" : "Desktop/Tablet",
+        user_agent: navigator.userAgent,
+        resolusi_layar: `${window.screen.width}x${window.screen.height}`,
+        bahasa: navigator.language,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        gps_latitude: gpsData.latitude,
+        gps_longitude: gpsData.longitude,
+        akurasi_gps: gpsData.accuracy,
+        status_gps: gpsData.status,
+        jenis_koneksi: navigator.connection ? navigator.connection.effectiveType : "Unknown",
+        durasi_pengisian: durationSeconds + " Detik",
+        status_submit: "Sukses",
+        halaman_asal: document.referrer || "Direct Access"
+      };
+
+      // Satukan Payload Utama
+      const finalPayload = {
+        siswa: dataSiswa,
+        tracking: trackingData
+      };
+
+      // Tembak Data Melalui Jembatan api.js ke Google Apps Script Anda
+      const response = await sendToPandaBackend("submit_diagnostik", finalPayload);
+      
+      if (response.status === "success") {
+        Swal.fire({
+          icon: 'success',
+          title: 'Berhasil Terkirim!',
+          text: response.message,
+          confirmButtonColor: '#00539C',
+          borderRadius: '16px'
+        }).then(() => {
+          document.getElementById("formDiagnostik").reset();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
