@@ -1,0 +1,252 @@
+/**
+ * PANDA (Pemetaan Anak melalui Diagnostik Awal) v1.0
+ * File: /assets/css/main.css
+ * Deskripsi: Arsitektur UI Global & Variabel Warna Berbasis Material Design 3.
+ * Developer: MB
+ * Build: 02 Juli 2026
+ */
+
+/* ==========================================================================
+   1. VARIABEL WARNA GLOBAL (MATERIAL DESIGN 3)
+   ========================================================================== */
+:root {
+  /* Mode Terang (Default) - Palet Biru SMP Formal & Profesional */
+  --md-primary: #00539C;
+  --md-on-primary: #FFFFFF;
+  --md-primary-container: #D1E4FF;
+  --md-on-primary-container: #001D36;
+  
+  --md-secondary: #535F70;
+  --md-on-secondary: #FFFFFF;
+  --md-secondary-container: #D7E3F7;
+  --md-on-secondary-container: #101C2B;
+
+  --md-surface: #F8F9FC;
+  --md-on-surface: #1A1C1E;
+  --md-surface-variant: #E0E2EC;
+  --md-on-surface-variant: #43474E;
+  
+  --md-background: #F8F9FC;
+  --md-on-background: #1A1C1E;
+  
+  --md-outline: #74777F;
+  --md-error: #BA1A1A;
+  --md-success: #2E7D32;
+  
+  /* Nilai Struktural */
+  --radius-small: 8px;
+  --radius-medium: 12px;
+  --radius-large: 16px;
+  --radius-extra-large: 28px;
+  --transition-smooth: all 0.25s cubic-bezier(0.2, 0, 0, 1);
+  --shadow-1: 0px 1px 3px 1px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+  --shadow-2: 0px 2px 6px 2px rgba(0, 0, 0, 0.15), 0px 1px 2px 0px rgba(0, 0, 0, 0.30);
+}
+
+/* Otomatis Adaptasi ke Mode Gelap Jika Sistem HP/Komputer User Berwarna Gelap */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --md-primary: #9ECAFF;
+    --md-on-primary: #002F5D;
+    --md-primary-container: #00457B;
+    --md-on-primary-container: #D1E4FF;
+    
+    --md-secondary: #BBC7DB;
+    --md-on-secondary: #253140;
+    --md-secondary-container: #3B4858;
+    --md-on-secondary-container: #D7E3F7;
+
+    --md-surface: #111315;
+    --md-on-surface: #E2E2E5;
+    --md-surface-variant: #43474E;
+    --md-on-surface-variant: #C4C6CF;
+    
+    --md-background: #111315;
+    --md-on-background: #E2E2E5;
+    
+    --md-outline: #8E9199;
+  }
+}
+
+/* ==========================================================================
+   2. ATURAN RESET DASAR & TIPOGRAFI
+   ========================================================================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  background-color: var(--md-background);
+  color: var(--md-on-background);
+  line-height: 1.6;
+  padding-bottom: 60px; /* Jarak aman agar tidak tertutup navbar bawah di HP */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* ==========================================================================
+   3. KOMPONEN UI UTAMA (CARDS, BUTTONS, FORMS)
+   ========================================================================== */
+.panda-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Kartu Desain Material 3 (Elevated Card) */
+.md-card {
+  background-color: var(--md-surface);
+  border-radius: var(--radius-large);
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--md-surface-variant);
+  box-shadow: var(--shadow-1);
+  transition: var(--transition-smooth);
+}
+
+.md-card:hover {
+  box-shadow: var(--shadow-2);
+}
+
+/* Header Komponen */
+.md-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--md-primary);
+  margin-bottom: 8px;
+}
+
+.md-subtitle {
+  font-size: 14px;
+  color: var(--md-on-surface-variant);
+  margin-bottom: 16px;
+}
+
+/* Elemen Input Formulir */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--md-on-surface);
+}
+
+.form-control {
+  width: 100%;
+  padding: 14px 16px;
+  font-size: 15px;
+  font-family: inherit;
+  border-radius: var(--radius-small);
+  border: 2px solid var(--md-outline);
+  background-color: transparent;
+  color: var(--md-on-surface);
+  outline: none;
+  transition: var(--transition-smooth);
+}
+
+.form-control:focus {
+  border-color: var(--md-primary);
+  box-shadow: 0 0 0 2px var(--md-primary-container);
+}
+
+/* Desain Pilihan Radio/Checkbox Custom */
+.radio-tile-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-tile-label {
+  display: flex;
+  align-items: center;
+  padding: 14px 16px;
+  border: 2px solid var(--md-surface-variant);
+  border-radius: var(--radius-medium);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  background-color: var(--md-surface);
+}
+
+.radio-tile-label:hover {
+  background-color: var(--md-primary-container);
+}
+
+input[type="radio"]:checked + .radio-tile-label {
+  border-color: var(--md-primary);
+  background-color: var(--md-primary-container);
+  color: var(--md-on-primary-container);
+  font-weight: 600;
+}
+
+/* Tombol Aksi Utama (Filled Button) */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 14px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--md-on-primary);
+  background-color: var(--md-primary);
+  border: none;
+  border-radius: var(--radius-extra-large);
+  cursor: pointer;
+  box-shadow: var(--shadow-1);
+  transition: var(--transition-smooth);
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  box-shadow: var(--shadow-2);
+}
+
+.btn-primary:disabled {
+  background-color: var(--md-surface-variant);
+  color: var(--md-on-surface-variant);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Navigation Bar Bawah Khusus Perangkat Mobile */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background-color: var(--md-surface);
+  border-top: 1px solid var(--md-surface-variant);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0px -1px 3px rgba(0,0,0,0.1);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--md-on-surface-variant);
+  transition: var(--transition-smooth);
+}
+
+.nav-item.active {
+  color: var(--md-primary);
+}
+
+.nav-icon {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
