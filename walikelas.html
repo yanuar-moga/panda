@@ -118,8 +118,21 @@
 
   <script src="./assets/js/api.js"></script>
   <script>
-    let sessionWaliPin = "";
-    let kelasAktif = "";
+    // Membaca token session PIN dan data kelas aktif dari storage browser jika ada
+    let sessionWaliPin = sessionStorage.getItem("panda_wk_pin") || "";
+    let kelasAktif = sessionStorage.getItem("panda_wk_kelas") || "";
+
+    // Periksa status login otomatis saat dokumen selesai dimuat
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionWaliPin && kelasAktif) {
+        document.getElementById("authPanel").style.display = "none";
+        document.getElementById("waliDashboard").style.display = "block";
+        document.getElementById("btnLogout").style.display = "block";
+        document.getElementById("txtKelasAktif").innerText = kelasAktif;
+        
+        fetchWaliKelasData();
+      }
+    });
 
     // Event Handler Login Wali Kelas
     document.getElementById("btnLoginWali").addEventListener("click", async () => {
@@ -136,6 +149,10 @@
       if (response.status === "success") {
         sessionWaliPin = pin;
         kelasAktif = kelas;
+        
+        // Amankan status login dan variabel kelas ke sessionStorage agar tahan reload
+        sessionStorage.setItem("panda_wk_pin", pin);
+        sessionStorage.setItem("panda_wk_kelas", kelas);
         
         document.getElementById("authPanel").style.display = "none";
         document.getElementById("waliDashboard").style.display = "block";
@@ -197,6 +214,11 @@
     document.getElementById("btnLogout").addEventListener("click", () => {
       sessionWaliPin = "";
       kelasAktif = "";
+      
+      // Hapus token dan kelas dari memori browser saat logout manual klik dilakukan
+      sessionStorage.removeItem("panda_wk_pin");
+      sessionStorage.removeItem("panda_wk_kelas");
+      
       document.getElementById("pinWali").value = "";
       document.getElementById("authPanel").style.display = "block";
       document.getElementById("waliDashboard").style.display = "none";
