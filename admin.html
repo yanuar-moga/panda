@@ -5,16 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PANDA - Panel Administrator Utama</title>
   
-  <!-- Manifest & PWA Support -->
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#00539C">
   
-  <!-- Font Google Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Stylesheets -->
   <link rel="stylesheet" href="./assets/css/main.css">
   <style>
     /* Style Tambahan Khusus Manajemen Tabel Admin */
@@ -78,12 +75,10 @@
     }
   </style>
   
-  <!-- SweetAlert2 Library -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
-  <!-- HEADER APLIKASI -->
   <header style="background-color: var(--md-surface); border-bottom: 1px solid var(--md-surface-variant); padding: 16px; position: sticky; top: 0; z-index: 100;">
     <div style="max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 12px;">
@@ -97,10 +92,8 @@
     </div>
   </header>
 
-  <!-- CONTENT UTAMA -->
   <main class="panda-container" style="margin-top: 16px;">
     
-    <!-- AUTH PANEL (MUNCUL JIKA BELUM LOGIN) -->
     <div id="authPanel" class="md-card">
       <div class="md-title">Otentikasi Administrator</div>
       <div class="md-subtitle">Masukkan PIN Master Administrator untuk membuka konsol basis data.</div>
@@ -113,10 +106,8 @@
       <button id="btnLoginAdmin" class="btn-primary">Masuk Konsol Admin</button>
     </div>
 
-    <!-- MAIN DASHBOARD ADMIN (MUNCUL JIKA SUDAH LOGIN) -->
     <div id="adminDashboard" style="display: none;">
       
-      <!-- KONTROL PENCARIAN & SELECTION -->
       <div class="md-card">
         <div class="md-title">Pencarian & Manajemen Data</div>
         <div class="md-subtitle">Gunakan bar pencarian server-side untuk memfilter baris siswa.</div>
@@ -131,7 +122,6 @@
         </div>
       </div>
 
-      <!-- TABEL RESPONDEN -->
       <div class="md-card" style="padding: 12px;">
         <div class="table-responsive">
           <table class="admin-table">
@@ -144,12 +134,10 @@
               </tr>
             </thead>
             <tbody id="tableBodyAdmin">
-              <!-- Data Baris Dibuat Dinamis Melalui Javascript -->
-            </tbody>
+              </tbody>
           </table>
         </div>
 
-        <!-- BAR NAVIGASI PAGINATION -->
         <div class="pagination-bar">
           <button id="btnPrevPage" class="btn-page">Sebelumnya</button>
           <span id="txtPageInfo" style="font-size: 12px; font-weight: 600; color: var(--md-on-surface-variant);">Halaman 1 dari 1</span>
@@ -160,7 +148,6 @@
     </div>
   </main>
 
-  <!-- NAVIGATION BAR BOTTOM -->
   <nav class="bottom-nav">
     <a href="./index.html" class="nav-item">
       <div class="nav-icon">📝</div>
@@ -184,13 +171,23 @@
     </a>
   </nav>
 
-  <!-- RE-LINK CENTRALIZED API BRIDGE JS -->
   <script src="./assets/js/api.js"></script>
   <script>
-    let sessionAdminPin = "";
+    // Membaca token session PIN dari storage browser jika ada
+    let sessionAdminPin = sessionStorage.getItem("panda_admin_pin") || "";
     let currentPage = 1;
     const limitPerPage = 10;
     let totalPages = 1;
+
+    // Periksa status login otomatis saat dokumen selesai dimuat
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionAdminPin) {
+        document.getElementById("authPanel").style.display = "none";
+        document.getElementById("adminDashboard").style.display = "block";
+        document.getElementById("btnLogout").style.display = "block";
+        fetchAdminTableData();
+      }
+    });
 
     // Event Handler Login Admin
     document.getElementById("btnLoginAdmin").addEventListener("click", async () => {
@@ -201,6 +198,9 @@
 
       if (response.status === "success") {
         sessionAdminPin = pin;
+        // Amankan status login ke sessionStorage agar tahan reload
+        sessionStorage.setItem("panda_admin_pin", pin);
+        
         document.getElementById("authPanel").style.display = "none";
         document.getElementById("adminDashboard").style.display = "block";
         document.getElementById("btnLogout").style.display = "block";
@@ -324,6 +324,9 @@
     // Event Handler Logout Admin
     document.getElementById("btnLogout").addEventListener("click", () => {
       sessionAdminPin = "";
+      // Hapus token dari memori browser saat logout manual klik dilakukan
+      sessionStorage.removeItem("panda_admin_pin");
+      
       document.getElementById("pinAdmin").value = "";
       document.getElementById("authPanel").style.display = "block";
       document.getElementById("adminDashboard").style.display = "none";
