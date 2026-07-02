@@ -3,176 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PANDA - Statistik & Dashboard Real-Time</title>
+  <title>PANDA - Statistik Dashboard</title>
   
-  <!-- Manifest & PWA Support -->
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#00539C">
   
-  <!-- Font Google Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-  <!-- Stylesheets -->
   <link rel="stylesheet" href="./assets/css/main.css">
-  
-  <!-- SweetAlert2 & ApexCharts Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  
+  <style>
+    :root {
+      --primary: #00539C;
+      --md-surface: #FFFFFF;
+      --md-surface-variant: #F0F4F9;
+      --md-on-surface: #1A1C1E;
+      --md-on-surface-variant: #44474E;
+      --radius-medium: 16px;
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8F9FA; margin: 0; padding-bottom: 90px; }
+    .panda-container { max-width: 600px; margin: 16px auto; padding: 0 16px; }
+    .md-card { background: var(--md-surface); padding: 20px; border-radius: var(--radius-medium); box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    .md-title { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .md-subtitle { font-size: 12px; color: var(--md-on-surface-variant); margin-bottom: 16px; }
+    
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: white; display: flex; justify-content: space-around; padding: 12px 6px; border-top: 1px solid #EEE; z-index: 1000; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #74777F; font-size: 10px; }
+    .nav-item.active { color: var(--primary); font-weight: 700; }
+    .nav-icon { font-size: 22px; margin-bottom: 2px; }
+  </style>
 </head>
 <body>
 
-  <!-- HEADER APLIKASI -->
   <header style="background-color: var(--md-surface); border-bottom: 1px solid var(--md-surface-variant); padding: 16px; position: sticky; top: 0; z-index: 100;">
     <div style="max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 12px;">
-        <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" alt="Logo PANDA" style="height: 40px; width: auto; object-fit: contain;">
+        <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" alt="Logo" style="height: 40px; width: auto;">
         <div>
-          <h1 style="font-size: 18px; font-weight: 800; color: var(--md-primary); letter-spacing: -0.5px; line-height: 1;">PANDA</h1>
-          <span style="font-size: 11px; color: var(--md-on-surface-variant); font-weight: 500;">Statistik Diagnostik Makro</span>
+          <h1 style="font-size: 18px; font-weight: 800; color: var(--primary); margin: 0;">PANDA</h1>
+          <span style="font-size: 11px; color: var(--md-on-surface-variant);">Statistik Diagnostik Makro</span>
         </div>
       </div>
-      <button id="btnRefresh" style="background: none; border: none; font-size: 20px; cursor: pointer;">🔄</button>
+      <button id="btnRefresh" style="background: none; border: none; font-size: 20px; cursor: pointer;"><i class="bi bi-arrow-clockwise"></i></button>
     </div>
   </header>
 
-  <!-- CONTENT UTAMA -->
-  <main class="panda-container" style="margin-top: 16px;">
-    
-    <!-- KARTU RINGKASAN TOTAL RESPONDEN -->
-    <div class="md-card" style="text-align: center; background: linear-gradient(135deg, var(--md-primary) 0%, #003B71 100%); color: var(--md-on-primary); border: none;">
-      <span style="font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; opacity: 0.8;">Total Partisipasi Siswa</span>
-      <h2 id="txtTotalSiswa" style="font-size: 48px; font-weight: 800; margin: 4px 0; line-height: 1;">0</h2>
-      <p style="font-size: 12px; opacity: 0.7;">Data terhitung secara real-time dari database Google Sheets.</p>
+  <main class="panda-container">
+    <div class="md-card" style="text-align: center; background: var(--primary); color: #FFF; border: none;">
+      <div style="font-size: 12px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; opacity: 0.8;">Total Partisipasi</div>
+      <h2 id="txtTotalSiswa" style="font-size: 48px; font-weight: 800; margin: 4px 0;">0</h2>
     </div>
 
-    <!-- GRAFIK 1: MODALITAS GAYA BELAJAR -->
     <div class="md-card">
-      <div class="md-title">Sebaran Gaya Belajar (VAK)</div>
-      <div class="md-subtitle">Analisis persentase kecenderungan modalitas belajar siswa.</div>
+      <div class="md-title">Gaya Belajar (VAK)</div>
       <div id="chartGayaBelajar" style="min-height: 250px;"></div>
     </div>
 
-    <!-- GRAFIK 2: SEBARAN PARTISIPASI KELAS -->
     <div class="md-card">
       <div class="md-title">Partisipasi Per Kelas</div>
-      <div class="md-subtitle">Jumlah siswa yang telah menyelesaikan pengisian instrumen.</div>
       <div id="chartKelas" style="min-height: 250px;"></div>
     </div>
-
-    <!-- GRAFIK 3: KEPEMILIKAN WA / GAWAI -->
-    <div class="md-card" style="margin-bottom: 32px;">
-      <div class="md-title">Akses Gawai Mandiri</div>
-      <div class="md-subtitle">Kepemilikan nomor WhatsApp pribadi untuk komunikasi belajar.</div>
-      <div id="chartGawai" style="min-height: 200px;"></div>
-    </div>
-
   </main>
 
-  <!-- NAVIGATION BAR BOTTOM -->
   <nav class="bottom-nav">
-    <a href="./index.html" class="nav-item">
-      <div class="nav-icon">📝</div>
-      <span>Form Isian</span>
-    </a>
-    <a href="./dashboard.html" class="nav-item active">
-      <div class="nav-icon">📊</div>
-      <span>Statistik</span>
-    </a>
-    <a href="./guru.html" class="nav-item">
-      <div class="nav-icon">👨‍🏫</div>
-      <span>Guru</span>
-    </a>
-    <a href="./walikelas.html" class="nav-item">
-      <div class="nav-icon">📋</div>
-      <span>Wali Kelas</span>
-    </a>
-    <a href="./admin.html" class="nav-item">
-      <div class="nav-icon">⚙️</div>
-      <span>Admin</span>
-    </a>
+    <a href="./index.html" class="nav-item"><i class="bi bi-pencil-square nav-icon"></i><span>Form</span></a>
+    <a href="./dashboard.html" class="nav-item active"><i class="bi bi-bar-chart-line nav-icon"></i><span>Statistik</span></a>
+    <a href="./guru.html" class="nav-item"><i class="bi bi-person-badge nav-icon"></i><span>Guru</span></a>
+    <a href="./walikelas.html" class="nav-item"><i class="bi bi-people nav-icon"></i><span>Wali</span></a>
+    <a href="./admin.html" class="nav-item"><i class="bi bi-gear nav-icon"></i><span>Admin</span></a>
   </nav>
 
-  <!-- RE-LINK CENTRALIZED API BRIDGE JS -->
   <script src="./assets/js/api.js"></script>
   <script>
-    // Inisialisasi Kontainer Chart agar tidak null saat dipanggil
-    let chartVAK = null;
-    let chartClass = null;
-    let chartDevice = null;
+    let chartVAK, chartClass;
 
-    // Fungsi Utama Memuat dan Merender Data Dashboard
-    async function loadDashboardStatistics() {
-      const response = await sendToPandaBackend("get_dashboard_stat");
-      
-      if (response.status !== "success") {
-        Swal.fire({
-          icon: 'error',
-          title: 'Gagal Memuat Statistik',
-          text: 'Terjadi gangguan saat mengambil ringkasan database.',
-          confirmButtonColor: '#00539C'
+    async function loadStats() {
+      const res = await sendToPandaBackend("get_dashboard_stat");
+      if (res.status === "success") {
+        document.getElementById("txtTotalSiswa").innerText = res.data.total_siswa;
+        
+        if (chartVAK) chartVAK.destroy();
+        chartVAK = new ApexCharts(document.querySelector("#chartGayaBelajar"), {
+          series: [res.data.gaya_belajar.visual, res.data.gaya_belajar.auditori, res.data.gaya_belajar.kinestetik],
+          chart: { type: 'donut', height: 250 },
+          labels: ['Visual', 'Auditori', 'Kinestetik'],
+          colors: ['#00539C', '#FF9800', '#4CAF50']
         });
-        return;
+        chartVAK.render();
+
+        if (chartClass) chartClass.destroy();
+        chartClass = new ApexCharts(document.querySelector("#chartKelas"), {
+          series: [{ data: Object.values(res.data.sebaran_kelas) }],
+          chart: { type: 'bar', height: 250 },
+          xaxis: { categories: Object.keys(res.data.sebaran_kelas) }
+        });
+        chartClass.render();
       }
-
-      const data = response.data;
-
-      // Update Angka Total Responden
-      document.getElementById("txtTotalSiswa").innerText = data.total_siswa;
-
-      // 1. Render/Update Chart Gaya Belajar (Pie/Donut Chart)
-      const optionsVAK = {
-        series: [data.gaya_belajar.visual, data.gaya_belajar.auditori, data.gaya_belajar.kinestetik],
-        chart: { type: 'donut', height: 260 },
-        labels: ['Visual', 'Auditori', 'Kinestetik'],
-        colors: ['#00539C', '#FF9800', '#4CAF50'],
-        legend: { position: 'bottom' },
-        dataLabels: { enabled: true, formatter: (val) => val.toFixed(1) + "%" }
-      };
-
-      if(chartVAK) chartVAK.destroy();
-      chartVAK = new ApexCharts(document.querySelector("#chartGayaBelajar"), optionsVAK);
-      chartVAK.render();
-
-      // 2. Render/Update Chart Partisipasi Kelas (Bar Chart)
-      const labelKelas = Object.keys(data.sebaran_kelas);
-      const seriKelas = Object.values(data.sebaran_kelas);
-
-      const optionsClass = {
-        series: [{ name: 'Siswa', data: seriKelas }],
-        chart: { type: 'bar', height: 250, toolbar: { show: false } },
-        colors: ['#00539C'],
-        plotOptions: { bar: { borderRadius: 6, horizontal: false, columnWidth: '55%' } },
-        dataLabels: { enabled: false },
-        xaxis: { categories: labelKelas },
-        yaxis: { title: { text: 'Jumlah Anak' } }
-      };
-
-      if(chartClass) chartClass.destroy();
-      chartClass = new ApexCharts(document.querySelector("#chartKelas"), optionsClass);
-      chartClass.render();
-
-      // 3. Render/Update Chart Kepemilikan Gawai (Bar Horizontal)
-      const optionsDevice = {
-        series: [{ name: 'Siswa', data: [data.kepemilikan_wa.ya, data.kepemilikan_wa.tidak] }],
-        chart: { type: 'bar', height: 180, toolbar: { show: false } },
-        colors: ['#2E7D32', '#C62828'],
-        plotOptions: { bar: { borderRadius: 4, horizontal: true, barHeight: '60%' } },
-        dataLabels: { enabled: true },
-        xaxis: { categories: ['Punya WA Mandiri', 'Gabung Ortu/Tidak Ada'] }
-      };
-
-      if(chartDevice) chartDevice.destroy();
-      chartDevice = new ApexCharts(document.querySelector("#chartGawai"), optionsDevice);
-      chartDevice.render();
     }
 
-    // Jalankan pemuatan data otomatis saat halaman selesai dimuat pertama kali
-    document.addEventListener("DOMContentLoaded", loadDashboardStatistics);
-    
-    // Pasang Event Listener Manual pada Tombol Refresh di Header
-    document.getElementById("btnRefresh").addEventListener("click", loadDashboardStatistics);
+    document.getElementById("btnRefresh").addEventListener("click", loadStats);
+    document.addEventListener("DOMContentLoaded", loadStats);
   </script>
 </body>
 </html>
