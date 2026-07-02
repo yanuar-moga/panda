@@ -5,24 +5,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PANDA - Panel Guru Mata Pelajaran</title>
   
-  <!-- Manifest & PWA Support -->
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#00539C">
   
-  <!-- Font Google Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Stylesheets -->
   <link rel="stylesheet" href="./assets/css/main.css">
   
-  <!-- SweetAlert2 Library -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
-  <!-- HEADER APLIKASI -->
   <header style="background-color: var(--md-surface); border-bottom: 1px solid var(--md-surface-variant); padding: 16px; position: sticky; top: 0; z-index: 100;">
     <div style="max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 12px;">
@@ -36,10 +31,8 @@
     </div>
   </header>
 
-  <!-- CONTENT UTAMA -->
   <main class="panda-container" style="margin-top: 16px;">
     
-    <!-- AUTH PANEL (MUNCUL JIKA BELUM LOGIN) -->
     <div id="authPanel" class="md-card">
       <div class="md-title">Otentikasi Akses Guru</div>
       <div class="md-subtitle">Masukkan PIN khusus akses Guru untuk membuka data diagnostik.</div>
@@ -52,10 +45,8 @@
       <button id="btnLoginGuru" class="btn-primary">Masuk Panel Guru</button>
     </div>
 
-    <!-- MAIN DASHBOARD GURU (MUNCUL JIKA SUDAH LOGIN) -->
     <div id="guruDashboard" style="display: none;">
       
-      <!-- FILTER PANEL -->
       <div class="md-card">
         <div class="md-title">Filter Analisis Diferensiasi</div>
         <div class="md-subtitle">Saring kelompok siswa berdasarkan kebutuhan mengajar Anda.</div>
@@ -86,7 +77,6 @@
         <button id="btnCariGuru" class="btn-primary">Terapkan & Muat Pemetaan</button>
       </div>
 
-      <!-- KARTU RINGKASAN STRATEGI GURU -->
       <div id="summaryCard" class="md-card" style="display: none; background-color: var(--md-primary-container); color: var(--md-on-primary-container); border: none;">
         <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">📈 Ringkasan Klaster Pembelajaran</h3>
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; margin-bottom: 12px;">
@@ -108,13 +98,11 @@
         </p>
       </div>
 
-      <!-- TEMPAT DAFTAR SISWA HASIL FILTER -->
       <div id="siswaContainer"></div>
 
     </div>
   </main>
 
-  <!-- NAVIGATION BAR BOTTOM -->
   <nav class="bottom-nav">
     <a href="./index.html" class="nav-item">
       <div class="nav-icon">📝</div>
@@ -138,10 +126,20 @@
     </a>
   </nav>
 
-  <!-- RE-LINK CENTRALIZED API BRIDGE JS -->
   <script src="./assets/js/api.js"></script>
   <script>
-    let sessionGuruPin = "";
+    // Membaca token session PIN dari storage browser jika ada
+    let sessionGuruPin = sessionStorage.getItem("panda_guru_pin") || "";
+
+    // Periksa status login otomatis saat dokumen selesai dimuat
+    document.addEventListener("DOMContentLoaded", () => {
+      if (sessionGuruPin) {
+        document.getElementById("authPanel").style.display = "none";
+        document.getElementById("guruDashboard").style.display = "block";
+        document.getElementById("btnLogout").style.display = "block";
+        fetchGuruMappedData();
+      }
+    });
 
     // Event Handler Login Guru
     document.getElementById("btnLoginGuru").addEventListener("click", async () => {
@@ -152,6 +150,9 @@
 
       if (response.status === "success") {
         sessionGuruPin = pin;
+        // Amankan status login ke sessionStorage agar tahan reload
+        sessionStorage.setItem("panda_guru_pin", pin);
+        
         document.getElementById("authPanel").style.display = "none";
         document.getElementById("guruDashboard").style.display = "block";
         document.getElementById("btnLogout").style.display = "block";
@@ -219,6 +220,9 @@
     // Event Handler Logout Guru
     document.getElementById("btnLogout").addEventListener("click", () => {
       sessionGuruPin = "";
+      // Hapus token dari memori browser saat logout manual klik dilakukan
+      sessionStorage.removeItem("panda_guru_pin");
+      
       document.getElementById("pinGuru").value = "";
       document.getElementById("authPanel").style.display = "block";
       document.getElementById("guruDashboard").style.display = "none";
