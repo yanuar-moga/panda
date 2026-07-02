@@ -9,15 +9,11 @@
   <meta name="theme-color" content="#003B95">
   <meta name="apple-mobile-web-app-capable" content="yes">
   
-  <!-- Font Google Poppins (Sesuai Design System) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <style>
-    /* ====================================================================
-       PANDA DESIGN SYSTEM CORE STYLES (Modern Soft UI Dashboard 2026)
-       ==================================================================== */
     :root {
       --bg-app: #F4F7FC;
       --bg-card: #FFFFFF;
@@ -47,7 +43,6 @@
       overflow-x: hidden;
     }
 
-    /* Header */
     .panda-header {
       background-color: var(--bg-card);
       padding: 18px 20px;
@@ -57,52 +52,15 @@
       box-shadow: var(--shadow-soft);
       border-bottom: 1px solid rgba(0, 59, 149, 0.03);
     }
-    .header-wrapper {
-      max-width: 600px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .header-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-    .header-logo {
-      height: 42px;
-      width: auto;
-      object-fit: contain;
-    }
-    .header-title h1 {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -0.5px;
-      line-height: 1.1;
-    }
-    .header-title span {
-      font-size: 11px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-    .badge-version {
-      font-size: 11px;
-      font-weight: 700;
-      background-color: rgba(0, 59, 149, 0.08);
-      color: var(--primary);
-      padding: 4px 12px;
-      border-radius: 20px;
-    }
+    .header-wrapper { max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; }
+    .header-brand { display: flex; align-items: center; gap: 12px; }
+    .header-logo { height: 42px; width: auto; object-fit: contain; }
+    .header-title h1 { font-size: 18px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; line-height: 1.1; }
+    .header-title span { font-size: 11px; color: var(--text-muted); font-weight: 500; }
+    .badge-version { font-size: 11px; font-weight: 700; background-color: rgba(0, 59, 149, 0.08); color: var(--primary); padding: 4px 12px; border-radius: 20px; }
 
-    /* Container */
-    .panda-container {
-      max-width: 600px;
-      margin: 20px auto 0 auto;
-      padding: 0 16px;
-    }
+    .panda-container { max-width: 600px; margin: 20px auto 0 auto; padding: 0 16px; }
 
-    /* Card System */
     .panda-card {
       background-color: var(--bg-card);
       border-radius: var(--radius-card);
@@ -111,47 +69,16 @@
       box-shadow: var(--shadow-soft);
       animation: slideIn .4s cubic-bezier(.4, 0, .2, 1) forwards;
     }
-    .card-hero {
-      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-      color: #FFFFFF;
-    }
-    .card-hero h2 {
-      font-size: 22px;
-      font-weight: 800;
-      margin-bottom: 8px;
-      letter-spacing: -0.5px;
-    }
-    .card-hero p {
-      font-size: 13px;
-      opacity: 0.85;
-      line-height: 1.6;
-    }
+    .card-hero { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%); color: #FFFFFF; }
+    .card-hero h2 { font-size: 22px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+    .card-hero p { font-size: 13px; opacity: 0.85; line-height: 1.6; }
 
-    .panda-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 4px;
-      letter-spacing: -0.3px;
-    }
-    .panda-subtitle {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 24px;
-      line-height: 1.4;
-    }
+    .panda-title { font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 4px; letter-spacing: -0.3px; }
+    .panda-subtitle { font-size: 12px; color: var(--text-muted); margin-bottom: 24px; line-height: 1.4; }
 
-    /* Form & Input System */
-    .form-group {
-      margin-bottom: 20px;
-    }
-    .form-label {
-      display: block;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 8px;
-    }
+    .form-group { margin-bottom: 20px; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-main); margin-bottom: 8px; }
+    
     .form-control {
       width: 100%;
       background-color: var(--bg-input);
@@ -164,34 +91,20 @@
       transition: var(--transition-base);
       outline: none;
     }
-    .form-control:focus {
-      background-color: #FFFFFF;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(0, 59, 149, 0.1);
-    }
-    .form-control::placeholder {
-      color: #A0AEC0;
-    }
-    select.form-control {
+    .form-control:focus { background-color: #FFFFFF; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(0, 59, 149, 0.1); }
+    
+    /* Perbaikan: Menghilangkan lingkaran hitam bawaan browser */
+    select.form-control { 
       cursor: pointer;
+      appearance: none; 
+      -webkit-appearance: none; 
+      -moz-appearance: none;
+      background-image: none !important;
     }
 
-    /* Radio Tile Group System */
-    .radio-tile-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .radio-tile-item {
-      position: relative;
-      display: block;
-    }
-    .radio-tile-input {
-      position: absolute;
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+    .radio-tile-group { display: flex; flex-direction: column; gap: 10px; }
+    .radio-tile-item { position: relative; display: block; }
+    .radio-tile-input { position: absolute; opacity: 0; width: 0; height: 0; }
     .radio-tile-label {
       display: block;
       background-color: var(--bg-input);
@@ -204,15 +117,8 @@
       cursor: pointer;
       transition: var(--transition-base);
     }
-    .radio-tile-input:checked + .radio-tile-label {
-      background-color: #FFFFFF;
-      border-color: var(--primary);
-      color: var(--primary);
-      font-weight: 600;
-      box-shadow: 0 10px 20px rgba(0, 59, 149, 0.05);
-    }
+    .radio-tile-input:checked + .radio-tile-label { background-color: #FFFFFF; border-color: var(--primary); color: var(--primary); font-weight: 600; box-shadow: 0 10px 20px rgba(0, 59, 149, 0.05); }
 
-    /* Button System */
     .btn-primary {
       width: 100%;
       background-color: var(--primary);
@@ -226,143 +132,28 @@
       box-shadow: 0 4px 12px rgba(0, 59, 149, 0.15);
       transition: var(--transition-base);
     }
-    .btn-primary:hover {
-      background-color: var(--primary-hover);
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(0, 59, 149, 0.2);
-    }
-    .btn-primary:active {
-      transform: translateY(0);
-    }
+    .btn-primary:hover { background-color: var(--primary-hover); transform: translateY(-1px); }
 
-    /* Bottom Navigation Bar */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-color: var(--bg-card);
-      box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03);
-      display: flex;
-      justify-content: space-around;
-      padding: 12px 6px;
-      z-index: 80;
-      border-top: 1px solid rgba(0, 59, 149, 0.03);
-    }
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-decoration: none;
-      color: var(--text-muted);
-      font-size: 10px;
-      font-weight: 500;
-      transition: var(--transition-base);
-      width: 20%;
-    }
-    .nav-icon {
-      font-size: 18px;
-      margin-bottom: 4px;
-      transition: var(--transition-base);
-    }
-    .nav-item:hover {
-      color: var(--primary);
-    }
-    .nav-item.active {
-      color: var(--primary);
-      font-weight: 700;
-    }
-    .nav-item.active .nav-icon {
-      transform: scale(1.1);
-    }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: var(--bg-card); box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.03); display: flex; justify-content: space-around; padding: 12px 6px; z-index: 80; border-top: 1px solid rgba(0, 59, 149, 0.03); }
+    .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-muted); font-size: 10px; font-weight: 500; transition: var(--transition-base); width: 20%; }
+    .nav-icon { font-size: 18px; margin-bottom: 4px; }
+    .nav-item.active { color: var(--primary); font-weight: 700; }
 
-    /* App Footer */
-    .app-footer {
-      text-align: center;
-      padding: 24px 16px;
-      font-size: 11px;
-      color: var(--text-muted);
-      cursor: pointer;
-      transition: var(--transition-base);
-      margin-bottom: 10px;
-      font-weight: 500;
-    }
-    .app-footer:hover {
-      color: var(--primary);
-    }
+    .app-footer { text-align: center; padding: 24px 16px; font-size: 11px; color: var(--text-muted); cursor: pointer; margin-bottom: 10px; font-weight: 500; }
 
-    /* ====================================================================
-       NATIVE CUSTOM POPUP SYSTEM (Identik PANDA Design System)
-       ==================================================================== */
-    .panda-modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: rgba(45, 55, 72, 0.6);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity .3s cubic-bezier(.4, 0, .2, 1), visibility .3s cubic-bezier(.4, 0, .2, 1);
-    }
-    .panda-modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-    .panda-modal-wrapper {
-      background-color: var(--bg-card);
-      border-radius: 20px;
-      width: 100%;
-      max-width: 400px;
-      padding: 32px;
-      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
-      text-align: center;
-      transform: scale(0.85);
-      transition: transform .3s cubic-bezier(.4, 0, .2, 1);
-    }
-    .panda-modal-overlay.active .panda-modal-wrapper {
-      transform: scale(1);
-    }
-    .panda-modal-icon {
-      font-size: 44px;
-      margin-bottom: 16px;
-    }
-    .panda-modal-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 12px;
-    }
-    .panda-modal-text {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.6;
-      margin-bottom: 24px;
-    }
+    .panda-modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(45, 55, 72, 0.6); backdrop-filter: blur(4px); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; opacity: 0; visibility: hidden; transition: opacity .3s, visibility .3s; }
+    .panda-modal-overlay.active { opacity: 1; visibility: visible; }
+    .panda-modal-wrapper { background-color: var(--bg-card); border-radius: 20px; width: 100%; max-width: 400px; padding: 32px; box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1); text-align: center; transform: scale(0.85); transition: transform .3s; }
+    .panda-modal-overlay.active .panda-modal-wrapper { transform: scale(1); }
+    .panda-modal-icon { font-size: 44px; margin-bottom: 16px; }
+    .panda-modal-title { font-size: 20px; font-weight: 700; color: var(--primary); margin-bottom: 12px; }
+    .panda-modal-text { font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 24px; }
 
-    /* Animations */
-    @keyframes slideIn {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    @keyframes slideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body>
 
-  <!-- HEADER APLIKASI -->
   <header class="panda-header">
     <div class="header-wrapper">
       <div class="header-brand">
@@ -376,18 +167,13 @@
     </div>
   </header>
 
-  <!-- FORM UTAMA CONTAINER -->
   <main class="panda-container">
-    
-    <!-- Kartu Sambutan Hero -->
     <div class="panda-card card-hero">
       <h2>Halo, Selamat Datang!</h2>
       <p>Silakan isi formulir diagnostik awal ini dengan sejujur-jujurnya. Data ini akan sangat membantu Bapak/Ibu guru dalam merancang metode belajar yang paling menyenangkan buat kamu!</p>
     </div>
 
     <form id="formDiagnostik" autocomplete="off">
-      
-      <!-- KELOMPOK I: IDENTITAS SISWA -->
       <div class="panda-card">
         <div class="panda-title">Identitas Diri</div>
         <div class="panda-subtitle">Masukkan data diri kamu secara lengkap dan benar.</div>
@@ -435,11 +221,9 @@
         </div>
       </div>
 
-      <!-- KELOMPOK II: AKSES GAWAI & FASILITAS -->
       <div class="panda-card">
         <div class="panda-title">Kepemilikan Media Komunikasi</div>
         <div class="panda-subtitle">Fasilitas komunikasi untuk penunjang belajar dari rumah.</div>
-        
         <div class="form-group">
           <label class="form-label">Apakah kamu memiliki nomor WhatsApp mandiri di HP pribadi?</label>
           <div class="radio-tile-group">
@@ -455,11 +239,9 @@
         </div>
       </div>
 
-      <!-- KELOMPOK III: ASPEK GAYA BELAJAR VAK -->
       <div class="panda-card">
         <div class="panda-title">Cara & Gaya Belajar</div>
         <div class="panda-subtitle">Pilih situasi yang paling menggambarkan kebiasaan kamu sehari-hari.</div>
-        
         <div class="form-group">
           <label class="form-label">Bagaimana cara kamu yang paling mudah dalam mengingat informasi/materi pelajaran?</label>
           <div class="radio-tile-group">
@@ -479,75 +261,26 @@
         </div>
       </div>
 
-      <!-- KELOMPOK IV: MINAT, PSIKOSOSIAL & ORANG TUA -->
       <div class="panda-card">
         <div class="panda-title">Minat & Kondisi Sosial Ekonomi</div>
         <div class="panda-subtitle">Profil pelengkap asuhan dan hobi.</div>
-
-        <div class="form-group">
-          <label class="form-label" for="hobi">Hobi Dominan Kamu</label>
-          <input type="text" id="hobi" class="form-control" placeholder="Contoh: Sepakbola, Menggambar, Gaming" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="cita_cita">Cita-Cita Masa Depan</label>
-          <input type="text" id="cita_cita" class="form-control" placeholder="Contoh: Guru, Dokter, Programmer" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="pelajaran_favorit">Mata Pelajaran yang Paling Disukai</label>
-          <input type="text" id="pelajaran_favorit" class="form-control" placeholder="Contoh: Matematika, IPA" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="pelajaran_tidak_disukai">Mata Pelajaran yang Kurang Disukai</label>
-          <input type="text" id="pelajaran_tidak_disukai" class="form-control" placeholder="Berikan alasan singkat jika ada" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="ekstrakurikuler">Rencana Ekstrakurikuler yang Diikuti</label>
-          <input type="text" id="ekstrakurikuler" class="form-control" placeholder="Contoh: Pramuka, PMR, Basket" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="riwayat_penyakit">Apakah memiliki riwayat penyakit bawaan/khusus?</label>
-          <input type="text" id="riwayat_penyakit" class="form-control" placeholder="Tulis '-' jika tidak ada penyakit khusus" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="pendidikan_ayah">Pendidikan Terakhir Ayah</label>
-          <input type="text" id="pendidikan_ayah" class="form-control" placeholder="Contoh: SMA, S1, SMP" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="pendidikan_ibu">Pendidikan Terakhir Ibu</label>
-          <input type="text" id="pendidikan_ibu" class="form-control" placeholder="Contoh: SMA, D3" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="pekerjaan_ayah">Pekerjaan Utama Ayah</label>
-          <input type="text" id="pekerjaan_ayah" class="form-control" placeholder="Contoh: Karyawan Swasta, Buruh, Guru" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="pekerjaan_ibu">Pekerjaan Utama Ibu</label>
-          <input type="text" id="pekerjaan_ibu" class="form-control" placeholder="Contoh: Ibu Rumah Tangga, Pedagang" required>
-        </div>
-
+        <div class="form-group"><label class="form-label" for="hobi">Hobi Dominan Kamu</label><input type="text" id="hobi" class="form-control" placeholder="Contoh: Sepakbola, Menggambar, Gaming" required></div>
+        <div class="form-group"><label class="form-label" for="cita_cita">Cita-Cita Masa Depan</label><input type="text" id="cita_cita" class="form-control" placeholder="Contoh: Guru, Dokter, Programmer" required></div>
+        <div class="form-group"><label class="form-label" for="pelajaran_favorit">Mata Pelajaran yang Paling Disukai</label><input type="text" id="pelajaran_favorit" class="form-control" placeholder="Contoh: Matematika, IPA" required></div>
+        <div class="form-group"><label class="form-label" for="pelajaran_tidak_disukai">Mata Pelajaran yang Kurang Disukai</label><input type="text" id="pelajaran_tidak_disukai" class="form-control" placeholder="Berikan alasan singkat jika ada" required></div>
+        <div class="form-group"><label class="form-label" for="ekstrakurikuler">Rencana Ekstrakurikuler yang Diikuti</label><input type="text" id="ekstrakurikuler" class="form-control" placeholder="Contoh: Pramuka, PMR, Basket" required></div>
+        <div class="form-group"><label class="form-label" for="riwayat_penyakit">Apakah memiliki riwayat penyakit bawaan/khusus?</label><input type="text" id="riwayat_penyakit" class="form-control" placeholder="Tulis '-' jika tidak ada penyakit khusus" required></div>
+        <div class="form-group"><label class="form-label" for="pendidikan_ayah">Pendidikan Terakhir Ayah</label><input type="text" id="pendidikan_ayah" class="form-control" placeholder="Contoh: SMA, S1, SMP" required></div>
+        <div class="form-group"><label class="form-label" for="pendidikan_ibu">Pendidikan Terakhir Ibu</label><input type="text" id="pendidikan_ibu" class="form-control" placeholder="Contoh: SMA, D3" required></div>
+        <div class="form-group"><label class="form-label" for="pekerjaan_ayah">Pekerjaan Utama Ayah</label><input type="text" id="pekerjaan_ayah" class="form-control" placeholder="Contoh: Karyawan Swasta, Buruh, Guru" required></div>
+        <div class="form-group"><label class="form-label" for="pekerjaan_ibu">Pekerjaan Utama Ibu</label><input type="text" id="pekerjaan_ibu" class="form-control" placeholder="Contoh: Ibu Rumah Tangga, Pedagang" required></div>
         <div class="form-group">
           <label class="form-label">Apakah memiliki Kartu Indonesia Pintar (KIP)?</label>
           <div class="radio-tile-group">
-            <div class="radio-tile-item">
-              <input type="radio" id="kip_ya" name="kepemilikan_kip" value="Ya" class="radio-tile-input" required>
-              <label for="kip_ya" class="radio-tile-label">Ya, Memiliki</label>
-            </div>
-            <div class="radio-tile-item">
-              <input type="radio" id="kip_tidak" name="kepemilikan_kip" value="Tidak" class="radio-tile-input" checked>
-              <label for="kip_tidak" class="radio-tile-label">Tidak Memiliki</label>
-            </div>
+            <div class="radio-tile-item"><input type="radio" id="kip_ya" name="kepemilikan_kip" value="Ya" class="radio-tile-input" required><label for="kip_ya" class="radio-tile-label">Ya, Memiliki</label></div>
+            <div class="radio-tile-item"><input type="radio" id="kip_tidak" name="kepemilikan_kip" value="Tidak" class="radio-tile-input" checked><label for="kip_tidak" class="radio-tile-label">Tidak Memiliki</label></div>
           </div>
         </div>
-
         <div class="form-group">
           <label class="form-label" for="status_yatim_piatu">Status Kelengkapan Keluarga</label>
           <select id="status_yatim_piatu" class="form-control" required>
@@ -557,48 +290,23 @@
             <option value="Yatim Piatu">Yatim Piatu (Kedua Orang Tua Meninggal)</option>
           </select>
         </div>
-
-        <div class="form-group">
-          <label class="form-label" for="aktivitas_motivasi">Hal yang paling membuat kamu termotivasi untuk belajar?</label>
-          <input type="text" id="aktivitas_motivasi" class="form-control" placeholder="Contoh: Pujian, Hadiah, Ingin Juara" required>
-        </div>
+        <div class="form-group"><label class="form-label" for="aktivitas_motivasi">Hal yang paling membuat kamu termotivasi untuk belajar?</label><input type="text" id="aktivitas_motivasi" class="form-control" placeholder="Contoh: Pujian, Hadiah, Ingin Juara" required></div>
       </div>
 
-      <!-- TOMBOL SUBMIT -->
       <button type="submit" class="btn-primary" id="btnSubmit" style="margin-bottom: 32px;">Kirim Data Diagnostik</button>
     </form>
 
-    <!-- FOOTER APLIKASI -->
-    <footer id="appFooter" class="app-footer">
-      &copy; 2026 PANDA Application. Hak Cipta Dilindungi.
-    </footer>
+    <footer id="appFooter" class="app-footer">&copy; 2026 PANDA Application. Hak Cipta Dilindungi.</footer>
   </main>
 
-  <!-- NAVIGATION BAR BOTTOM -->
   <nav class="bottom-nav">
-    <a href="./index.html" class="nav-item active">
-      <div class="nav-icon">📝</div>
-      <span>Form Isian</span>
-    </a>
-    <a href="./dashboard.html" class="nav-item">
-      <div class="nav-icon">📊</div>
-      <span>Statistik</span>
-    </a>
-    <a href="./guru.html" class="nav-item">
-      <div class="nav-icon">👨‍🏫</div>
-      <span>Guru</span>
-    </a>
-    <a href="./walikelas.html" class="nav-item">
-      <div class="nav-icon">📋</div>
-      <span>Wali Kelas</span>
-    </a>
-    <a href="./admin.html" class="nav-item">
-      <div class="nav-icon">⚙️</div>
-      <span>Admin</span>
-    </a>
+    <a href="./index.html" class="nav-item active"><div class="nav-icon">📝</div><span>Form Isian</span></a>
+    <a href="./dashboard.html" class="nav-item"><div class="nav-icon">📊</div><span>Statistik</span></a>
+    <a href="./guru.html" class="nav-item"><div class="nav-icon">👨‍🏫</div><span>Guru</span></a>
+    <a href="./walikelas.html" class="nav-item"><div class="nav-icon">📋</div><span>Wali Kelas</span></a>
+    <a href="./admin.html" class="nav-item"><div class="nav-icon">⚙️</div><span>Admin</span></a>
   </nav>
 
-  <!-- NATIVE MODAL SYSTEM (SUBSTITUSI SWEETALERT BERDASARKAN DESIGN SYSTEM) -->
   <div id="pandaModal" class="panda-modal-overlay">
     <div class="panda-modal-wrapper">
       <div id="modalIcon" class="panda-modal-icon">✨</div>
@@ -608,58 +316,38 @@
     </div>
   </div>
 
-  <!-- SCRIPT HANDLING BRIDGING BACKEND -->
   <script src="./assets/js/api.js"></script>
   <script>
-    // Penanda Waktu Mulai Sesi Pengisian
     const startTime = performance.now();
-
-    // PWA Service Worker Registration
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-          .then(reg => console.log('PWA Service Worker sukses terpasang.', reg.scope))
-          .catch(err => console.error('PWA Service Worker gagal.', err));
+        navigator.serviceWorker.register('./service-worker.js').catch(err => console.error('PWA Service Worker gagal.', err));
       });
     }
 
-    // Fungsi Pengendali Tampilan Popup Native PANDA
     function showPandaModal(title, text, icon = "✨", callback = null) {
       const modal = document.getElementById("pandaModal");
       document.getElementById("modalTitle").innerText = title;
       document.getElementById("modalText").innerText = text;
       document.getElementById("modalIcon").innerText = icon;
-      
       modal.classList.add("active");
-
       const closeBtn = document.getElementById("modalBtn");
-      // Reset event handler sebelumnya untuk mencegah tumpang tindih
-      closeBtn.onclick = null;
-      
       closeBtn.onclick = function() {
         modal.classList.remove("active");
         if (callback) callback();
       };
     }
 
-    // Modal Tentang Aplikasi via Footer Tap
     document.getElementById("appFooter").addEventListener("click", () => {
-      showPandaModal(
-        "PANDA App",
-        "Pemetaan Anak melalui Diagnostik Awal\n\nVersi: 1.0 (Build 02 Juli 2026)\nDeveloper: MB\nKontak: yanuar.b@gmail.com",
-        "🐼"
-      );
+      showPandaModal("PANDA App", "Pemetaan Anak melalui Diagnostik Awal\n\nVersi: 1.0 (Build 02 Juli 2026)\nDeveloper: MB\nKontak: yanuar.b@gmail.com", "🐼");
     });
 
-    // Form Submit Event Handler & Data Packaging System
     document.getElementById("formDiagnostik").addEventListener("submit", async (e) => {
       e.preventDefault();
-      
       const submitBtn = document.getElementById("btnSubmit");
       submitBtn.innerText = "Memproses Data...";
       submitBtn.disabled = true;
-      
-      // Ambil Koordinat GPS Siswa (Browser Geolocation API)
+
       let gpsData = { latitude: "-", longitude: "-", accuracy: "-", status: "Ditolak/Tidak Didukung" };
       if (navigator.geolocation) {
         const getGPS = () => new Promise((resolve) => {
@@ -672,11 +360,9 @@
         gpsData = await getGPS();
       }
 
-      // Hitung Durasi Pengisian Realtime
       const endTime = performance.now();
-      const durationSeconds = Math.round((endTime - startTime) / 1000) + 12; // Kompensasi render awal
+      const durationSeconds = Math.round((endTime - startTime) / 1000) + 12;
 
-      // Penyusunan Payload Obyek Data Siswa
       const dataSiswa = {
         timestamp: new Date().toISOString(),
         nama: document.getElementById("nama").value,
@@ -701,7 +387,6 @@
         aktivitas_motivasi: document.getElementById("aktivitas_motivasi").value
       };
 
-      // Penyusunan Payload Objek Metadata Tracking Teknis
       const trackingData = {
         session_id: "SESS_" + Math.random().toString(36).substr(2, 9).toUpperCase(),
         responden_id: "RESP_" + dataSiswa.nisn,
@@ -724,16 +409,10 @@
         halaman_asal: document.referrer || "Direct Access"
       };
 
-      const finalPayload = {
-        siswa: dataSiswa,
-        tracking: trackingData
-      };
-
       try {
-        const response = await sendToPandaBackend("submit_diagnostik", finalPayload);
-        
+        const response = await sendToPandaBackend("submit_diagnostik", { siswa: dataSiswa, tracking: trackingData });
         if (response.status === "success") {
-          showPandaModal("Berhasil Terkirim!", response.message || "Data profil bergenre diagnostik kamu sukses tersimpan.", "✅", () => {
+          showPandaModal("Berhasil Terkirim!", response.message || "Data sukses tersimpan.", "✅", () => {
             document.getElementById("formDiagnostik").reset();
             window.scrollTo({ top: 0, behavior: 'smooth' });
           });
@@ -741,7 +420,7 @@
           showPandaModal("Gagal Mengirim", response.message || "Gagal diverifikasi oleh server.", "❌");
         }
       } catch (err) {
-        showPandaModal("Gangguan Jaringan", "Koneksi terputus atau backend tidak merespon.", "⚠️");
+        showPandaModal("Gangguan Jaringan", "Koneksi terputus.", "⚠️");
       } finally {
         submitBtn.innerText = "Kirim Data Diagnostik";
         submitBtn.disabled = false;
