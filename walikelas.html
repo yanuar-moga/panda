@@ -144,7 +144,8 @@
         return;
       }
 
-      const response = await sendToPandaBackend("wk_login", { pin: pin });
+      // Bypass multi-parameter PIN agar kompatibel dengan pembungkus api.js dan ekstraktor backend Kode.gs
+      const response = await sendToPandaBackend("wk_login", { pin: pin, wk_pin: pin }, pin, "wk_pin");
 
       if (response.status === "success") {
         sessionWaliPin = pin;
@@ -160,6 +161,8 @@
         document.getElementById("txtKelasAktif").innerText = kelasAktif;
         
         fetchWaliKelasData();
+      } else {
+        Swal.fire({ icon: 'error', title: 'Gagal Masuk', text: response.message || 'PIN Wali Kelas salah atau tidak sesuai.', confirmButtonColor: '#ba1a1a' });
       }
     });
 
