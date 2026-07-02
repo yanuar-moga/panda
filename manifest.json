@@ -1,0 +1,18 @@
+{
+  "short_name": "PANDA",
+  "name": "PANDA (Pemetaan Anak melalui Diagnostik Awal)",
+  "description": "Aplikasi Pemetaan Karakter, Gaya Belajar, dan Diagnostik Awal Siswa Berbasis Material Design 3",
+  "icons": [
+    {
+      "src": "https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/index.html",
+  "background_color": "#FFFFFF",
+  "theme_color": "#00539C",
+  "display": "standalone",
+  "orientation": "portrait"
+}
