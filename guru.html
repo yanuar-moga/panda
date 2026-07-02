@@ -11,127 +11,110 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
   <link rel="stylesheet" href="./assets/css/main.css">
-  
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
+  <style>
+    :root {
+      --primary: #00539C;
+      --md-surface: #FFFFFF;
+      --md-surface-variant: #F0F4F9;
+      --md-on-surface: #1A1C1E;
+      --md-on-surface-variant: #44474E;
+      --md-primary-container: #D3E4FF;
+      --md-on-primary-container: #001C38;
+      --radius-medium: 16px;
+    }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #F8F9FA; margin: 0; padding-bottom: 90px; }
+    .panda-container { max-width: 600px; margin: 16px auto; padding: 0 16px; }
+    .md-card { background: var(--md-surface); padding: 20px; border-radius: var(--radius-medium); box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 20px; }
+    .md-title { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 4px; }
+    .md-subtitle { font-size: 12px; color: var(--md-on-surface-variant); margin-bottom: 16px; }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+    .form-control { width: 100%; padding: 12px; border: 1px solid #CED4DA; border-radius: 10px; font-size: 14px; box-sizing: border-box; }
+    .btn-primary { width: 100%; background-color: var(--primary); color: #FFF; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+    
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background-color: white; display: flex; justify-content: space-around; padding: 12px 6px; border-top: 1px solid #EEE; z-index: 1000; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #74777F; font-size: 10px; }
+    .nav-item.active { color: var(--primary); font-weight: 700; }
+    .nav-icon { font-size: 22px; margin-bottom: 2px; }
+  </style>
 </head>
 <body>
 
   <header style="background-color: var(--md-surface); border-bottom: 1px solid var(--md-surface-variant); padding: 16px; position: sticky; top: 0; z-index: 100;">
     <div style="max-width: 600px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 12px;">
-        <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" alt="Logo PANDA" style="height: 40px; width: auto; object-fit: contain;">
+        <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" alt="Logo" style="height: 40px; width: auto;">
         <div>
-          <h1 style="font-size: 18px; font-weight: 800; color: var(--md-primary); letter-spacing: -0.5px; line-height: 1;">PANDA</h1>
-          <span style="font-size: 11px; color: var(--md-on-surface-variant); font-weight: 500;">Panel Guru Mata Pelajaran</span>
+          <h1 style="font-size: 18px; font-weight: 800; color: var(--primary); margin: 0;">PANDA</h1>
+          <span style="font-size: 11px; color: var(--md-on-surface-variant);">Panel Guru Mata Pelajaran</span>
         </div>
       </div>
-      <button id="btnLogout" style="background: none; border: none; font-size: 18px; cursor: pointer; display: none;">🚪</button>
+      <button id="btnLogout" style="background: none; border: none; font-size: 20px; cursor: pointer; display: none;"><i class="bi bi-box-arrow-right"></i></button>
     </div>
   </header>
 
-  <main class="panda-container" style="margin-top: 16px;">
-    
+  <main class="panda-container">
     <div id="authPanel" class="md-card">
       <div class="md-title">Otentikasi Akses Guru</div>
-      <div class="md-subtitle">Masukkan PIN khusus akses Guru untuk membuka data diagnostik.</div>
-      
+      <div class="md-subtitle">Masukkan PIN akses untuk membuka data diagnostik.</div>
       <div class="form-group">
-        <label class="form-label" for="pinGuru">PIN Akses Guru</label>
-        <input type="password" id="pinGuru" class="form-control" placeholder="Masukkan 6 digit PIN" style="text-align: center; letter-spacing: 4px; font-size: 18px; font-weight: 700;">
+        <input type="password" id="pinGuru" class="form-control" placeholder="6 Digit PIN" style="text-align: center; letter-spacing: 8px; font-weight: 800;">
       </div>
-      
       <button id="btnLoginGuru" class="btn-primary">Masuk Panel Guru</button>
     </div>
 
     <div id="guruDashboard" style="display: none;">
-      
       <div class="md-card">
         <div class="md-title">Filter Analisis Diferensiasi</div>
-        <div class="md-subtitle">Saring kelompok siswa berdasarkan kebutuhan mengajar Anda.</div>
-        
         <div class="form-group">
-          <label class="form-label" for="filterKelas">Target Kelas</label>
+          <label class="form-label">Target Kelas</label>
           <select id="filterKelas" class="form-control">
             <option value="">Semua Kelas</option>
-            <option value="7A">7A</option>
-            <option value="7B">7B</option>
-            <option value="8A">8A</option>
-            <option value="8B">8B</option>
-            <option value="9A">9A</option>
-            <option value="9B">9B</option>
+            <option value="7A">7A</option><option value="7B">7B</option>
+            <option value="8A">8A</option><option value="8B">8B</option>
+            <option value="9A">9A</option><option value="9B">9B</option>
           </select>
         </div>
-
         <div class="form-group">
-          <label class="form-label" for="filterVAK">Modalitas Gaya Belajar</label>
+          <label class="form-label">Modalitas Gaya Belajar</label>
           <select id="filterVAK" class="form-control">
             <option value="">Semua Gaya Belajar</option>
-            <option value="Visual">Visual (Gambar/Teks)</option>
-            <option value="Auditori">Auditori (Suara/Diskusi)</option>
-            <option value="Kinestetik">Kinestetik (Praktik/Gerak)</option>
+            <option value="Visual">Visual</option>
+            <option value="Auditori">Auditori</option>
+            <option value="Kinestetik">Kinestetik</option>
           </select>
         </div>
-
-        <button id="btnCariGuru" class="btn-primary">Terapkan & Muat Pemetaan</button>
+        <button id="btnCariGuru" class="btn-primary">Terapkan Filter</button>
       </div>
 
-      <div id="summaryCard" class="md-card" style="display: none; background-color: var(--md-primary-container); color: var(--md-on-primary-container); border: none;">
-        <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 12px;">📈 Ringkasan Klaster Pembelajaran</h3>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; margin-bottom: 12px;">
-          <div style="background: rgba(255,255,255,0.4); padding: 8px; border-radius: 8px;">
-            <div style="font-size: 11px; font-weight: 600;">👁️ Visual</div>
-            <div id="sumVisual" style="font-size: 18px; font-weight: 700;">0</div>
-          </div>
-          <div style="background: rgba(255,255,255,0.4); padding: 8px; border-radius: 8px;">
-            <div style="font-size: 11px; font-weight: 600;">👂 Auditori</div>
-            <div id="sumAuditori" style="font-size: 18px; font-weight: 700;">0</div>
-          </div>
-          <div style="background: rgba(255,255,255,0.4); padding: 8px; border-radius: 8px;">
-            <div style="font-size: 11px; font-weight: 600;">🏃 Kinestetik</div>
-            <div id="sumKinestetik" style="font-size: 18px; font-weight: 700;">0</div>
-          </div>
+      <div id="summaryCard" class="md-card" style="display: none; background-color: var(--md-primary-container);">
+        <h3 style="font-size: 16px; margin-bottom: 12px;">📊 Ringkasan Klaster</h3>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center;">
+          <div style="background: #FFF; padding: 8px; border-radius: 8px;"><div>👁️ Visual</div><b id="sumVisual">0</b></div>
+          <div style="background: #FFF; padding: 8px; border-radius: 8px;"><div>👂 Auditori</div><b id="sumAuditori">0</b></div>
+          <div style="background: #FFF; padding: 8px; border-radius: 8px;"><div>🏃 Kinestetik</div><b id="sumKinestetik">0</b></div>
         </div>
-        <p style="font-size: 12px; line-height: 1.4; opacity: 0.9;">
-          ⚠️ Terdeteksi <b id="sumGawai" style="color: #BA1A1A;">0 anak</b> di klaster ini tidak memiliki HP mandiri. Hindari pemberian tugas rumah berbasis pengerjaan gawai instan online untuk kelompok tersebut.
-        </p>
       </div>
-
       <div id="siswaContainer"></div>
-
     </div>
   </main>
 
   <nav class="bottom-nav">
-    <a href="./index.html" class="nav-item">
-      <div class="nav-icon">📝</div>
-      <span>Form Isian</span>
-    </a>
-    <a href="./dashboard.html" class="nav-item">
-      <div class="nav-icon">📊</div>
-      <span>Statistik</span>
-    </a>
-    <a href="./guru.html" class="nav-item active">
-      <div class="nav-icon">👨‍🏫</div>
-      <span>Guru</span>
-    </a>
-    <a href="./walikelas.html" class="nav-item">
-      <div class="nav-icon">📋</div>
-      <span>Wali Kelas</span>
-    </a>
-    <a href="./admin.html" class="nav-item">
-      <div class="nav-icon">⚙️</div>
-      <span>Admin</span>
-    </a>
+    <a href="./index.html" class="nav-item"><i class="bi bi-pencil-square nav-icon"></i><span>Form</span></a>
+    <a href="./dashboard.html" class="nav-item"><i class="bi bi-bar-chart-line nav-icon"></i><span>Statistik</span></a>
+    <a href="./guru.html" class="nav-item active"><i class="bi bi-person-badge nav-icon"></i><span>Guru</span></a>
+    <a href="./walikelas.html" class="nav-item"><i class="bi bi-people nav-icon"></i><span>Wali</span></a>
+    <a href="./admin.html" class="nav-item"><i class="bi bi-gear nav-icon"></i><span>Admin</span></a>
   </nav>
 
   <script src="./assets/js/api.js"></script>
   <script>
-    // Membaca token session PIN dari storage browser jika ada
     let sessionGuruPin = sessionStorage.getItem("panda_guru_pin") || "";
-
-    // Periksa status login otomatis saat dokumen selesai dimuat
     document.addEventListener("DOMContentLoaded", () => {
       if (sessionGuruPin) {
         document.getElementById("authPanel").style.display = "none";
@@ -141,99 +124,42 @@
       }
     });
 
-    // Event Handler Login Guru
     document.getElementById("btnLoginGuru").addEventListener("click", async () => {
       const pin = document.getElementById("pinGuru").value;
-      if (!pin) {
-        Swal.fire({ icon: 'warning', title: 'Data Belum Lengkap', text: 'Silakan isi PIN Akses Guru Anda.', confirmButtonColor: '#00539C' });
-        return;
-      }
-
-      // Bypass multi-parameter PIN agar kompatibel dengan pembungkus api.js dan ekstraktor backend Kode.gs
-      const response = await sendToPandaBackend("guru_login", { pin: pin, guru_pin: pin }, pin, "guru_pin");
-
+      const response = await sendToPandaBackend("guru_login", { pin: pin }, pin, "guru_pin");
       if (response.status === "success") {
-        sessionGuruPin = pin;
-        // Amankan status login ke sessionStorage agar tahan reload
         sessionStorage.setItem("panda_guru_pin", pin);
-        
-        document.getElementById("authPanel").style.display = "none";
-        document.getElementById("guruDashboard").style.display = "block";
-        document.getElementById("btnLogout").style.display = "block";
-        
-        // Muat data default pertama kali masuk
-        fetchGuruMappedData();
+        location.reload();
       } else {
-        Swal.fire({ icon: 'error', title: 'Gagal Masuk', text: response.message || 'PIN Akses Guru salah.', confirmButtonColor: '#ba1a1a' });
+        Swal.fire('Gagal', 'PIN Salah', 'error');
       }
     });
 
-    // Event Handler Tarik Data Sesuai Filter
     document.getElementById("btnCariGuru").addEventListener("click", fetchGuruMappedData);
 
     async function fetchGuruMappedData() {
-      const params = {
-        kelas: document.getElementById("filterKelas").value,
-        cara_belajar: document.getElementById("filterVAK").value
-      };
-
+      const params = { kelas: document.getElementById("filterKelas").value, cara_belajar: document.getElementById("filterVAK").value };
       const response = await sendToPandaBackend("guru_get_data", params, sessionGuruPin, "guru_pin");
-
       if (response.status === "success") {
-        // 1. Isi Ringkasan Makro Klaster
         document.getElementById("summaryCard").style.display = "block";
         document.getElementById("sumVisual").innerText = response.summary.visual;
         document.getElementById("sumAuditori").innerText = response.summary.auditori;
         document.getElementById("sumKinestetik").innerText = response.summary.kinestetik;
-        document.getElementById("sumGawai").innerText = response.summary.butuh_perhatian_gawai;
-
-        // 2. Render Kartu Detail Siswa
+        
         const container = document.getElementById("siswaContainer");
         container.innerHTML = "";
-
-        if (response.students.length === 0) {
-          container.innerHTML = `<div class="md-card" style="text-align:center; color:var(--md-on-surface-variant);">Tidak ada data siswa yang cocok dengan kriteria filter.</div>`;
-          return;
-        }
-
         response.students.forEach(siswa => {
-          let badgeColor = "#00539C"; // Visual = Biru
-          if(siswa.cara_belajar.toLowerCase().includes("auditori")) badgeColor = "#FF9800"; // Auditori = Jingga
-          if(siswa.cara_belajar.toLowerCase().includes("kinestetik")) badgeColor = "#4CAF50"; // Kinestetik = Hijau
-
           const card = document.createElement("div");
           card.className = "md-card";
-          card.innerHTML = `
-            <div style="display:flex; justify-content:between; align-items:start; margin-bottom:8px;">
-              <div>
-                <h4 style="font-size:16px; font-weight:700; color:var(--md-on-surface);">${siswa.nama}</h4>
-                <span style="font-size:12px; color:var(--md-on-surface-variant); font-weight:500;">Kelas ${siswa.kelas} &bull; ${siswa.jenis_kelamin}</span>
-              </div>
-              <span style="font-size:11px; font-weight:700; color:#FFF; background-color:${badgeColor}; padding:2px 8px; border-radius:12px; margin-left:auto;">${siswa.cara_belajar}</span>
-            </div>
-            <div style="font-size:13px; border-top:1px dashed var(--md-surface-variant); padding-top:8px; margin-top:8px; display:grid; grid-template-columns:1fr; gap:4px;">
-              <div>❤️ <b>Disukai:</b> ${siswa.pelajaran_favorit || '-'}</div>
-              <div>❌ <b>Kurang Disukai:</b> ${siswa.pelajaran_tidak_disukai || '-'}</div>
-              <div>💡 <b>Motivator:</b> ${siswa.aktivitas_motivasi || '-'}</div>
-              <div>🎨 <b>Hobi:</b> ${siswa.hobi || '-'}</div>
-            </div>
-          `;
+          card.innerHTML = `<h4>${siswa.nama}</h4><p>${siswa.kelas} • ${siswa.cara_belajar}</p>`;
           container.appendChild(card);
         });
       }
     }
 
-    // Event Handler Logout Guru
     document.getElementById("btnLogout").addEventListener("click", () => {
-      sessionGuruPin = "";
-      // Hapus token dari memori browser saat logout manual klik dilakukan
       sessionStorage.removeItem("panda_guru_pin");
-      
-      document.getElementById("pinGuru").value = "";
-      document.getElementById("authPanel").style.display = "block";
-      document.getElementById("guruDashboard").style.display = "none";
-      document.getElementById("btnLogout").style.display = "none";
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      location.reload();
     });
   </script>
 </body>
