@@ -144,9 +144,13 @@
     // Event Handler Login Guru
     document.getElementById("btnLoginGuru").addEventListener("click", async () => {
       const pin = document.getElementById("pinGuru").value;
-      if (!pin) return;
+      if (!pin) {
+        Swal.fire({ icon: 'warning', title: 'Data Belum Lengkap', text: 'Silakan isi PIN Akses Guru Anda.', confirmButtonColor: '#00539C' });
+        return;
+      }
 
-      const response = await sendToPandaBackend("guru_login", { pin: pin });
+      // Bypass multi-parameter PIN agar kompatibel dengan pembungkus api.js dan ekstraktor backend Kode.gs
+      const response = await sendToPandaBackend("guru_login", { pin: pin, guru_pin: pin }, pin, "guru_pin");
 
       if (response.status === "success") {
         sessionGuruPin = pin;
@@ -159,6 +163,8 @@
         
         // Muat data default pertama kali masuk
         fetchGuruMappedData();
+      } else {
+        Swal.fire({ icon: 'error', title: 'Gagal Masuk', text: response.message || 'PIN Akses Guru salah.', confirmButtonColor: '#ba1a1a' });
       }
     });
 
