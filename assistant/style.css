@@ -1,69 +1,15 @@
-/* --- Jendela Chat --- */
-#chat-window {
-    width: 340px;
-    height: 500px;
-    background: white;
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    animation: chat-appear 0.3s ease;
-    overflow: hidden; /* Penting agar isi tidak keluar kotak */
-    position: relative;
-}
+/* Styling Utama */
+#panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999; transition: transform 0.3s; }
+#panda-icon:hover { transform: scale(1.1); }
+#panda-icon img { width: 60px; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 
-/* --- Header Chat --- */
-#chat-header {
-    background: linear-gradient(to bottom, #2e7d32, #4caf50);
-    color: white;
-    padding: 15px 15px 15px 85px; /* Padding kiri besar agar teks tidak nabrak logo */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: relative;
-    height: 60px; /* Menentukan tinggi header secara konsisten */
-    border-radius: 20px 20px 0 0;
-}
+#panda-chat { position: fixed; bottom: 90px; right: 20px; width: 320px; height: 450px; background: #fff; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; z-index: 9999; }
+.hidden { display: none !important; }
 
-/* --- Logo Chat (Nangkring) --- */
-.header-logo {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    object-fit: cover;
-    position: absolute;
-    top: 15px;      /* Atur posisi vertikal di sini */
-    left: 15px;     /* Atur posisi horizontal di sini */
-    border: 3px solid white;
-    background: white;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    z-index: 10;
-}
+.header { background: #4CAF50; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; }
+#chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f9f9f9; }
+#input-area { padding: 10px; border-top: 1px solid #eee; background: white; }
+#user-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 20px; box-sizing: border-box; }
 
-/* --- Judul Header --- */
-.header-title {
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    height: 100%;
-}
-
-/* --- Teks Typewriter --- */
-.typewriter {
-    display: inline-block;
-    overflow: hidden;
-    border-right: 2px solid rgba(255,255,255,0.75);
-    white-space: nowrap;
-    animation: typing 2s steps(20, end), blink-caret 0.75s step-end infinite;
-}
-
-/* --- Tombol Tutup --- */
-#close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    line-height: 1;
-}
+/* Animasi Chat */
+.typing { font-size: 0.8em; color: #888; font-style: italic; margin: 5px 0; }
