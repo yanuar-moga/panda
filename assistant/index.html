@@ -4,28 +4,138 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panda Assistant</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Tampilan Ikon */
+        #panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999; transition: transform 0.3s; }
+        #panda-icon img { width: 70px; }
+        #panda-icon:hover { transform: scale(1.1); }
+        
+        /* Jendela Chat */
+        #panda-chat { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; z-index: 9999; }
+        .hidden { display: none !important; }
+        
+        .header { background: #4CAF50; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; }
+        #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f0f2f5; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Balon Chat */
+        .bubble { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 14px; position: relative; word-wrap: break-word; }
+        .panda { align-self: flex-start; background: white; border: 1px solid #ddd; border-bottom-left-radius: 2px; }
+        .user { align-self: flex-end; background: #4CAF50; color: white; border-bottom-right-radius: 2px; }
+        
+        #input-area { padding: 10px; background: white; border-top: 1px solid #ddd; }
+        #user-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 20px; box-sizing: border-box; outline: none; }
+        .typing { font-size: 0.8em; color: #888; font-style: italic; margin-left: 10px; }
+    </style>
 </head>
 <body>
 
-    <div id="panda-icon" onclick="toggleChat()">
-        <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" alt="Panda">
+    <div id="panda-icon" onclick="openChat()">
+        <img src="https://yanuar-moga.github.io/panda/assistant/assets/mypanda.png" alt="Panda">
     </div>
 
     <div id="panda-chat" class="hidden">
         <div class="header">
-            <div style="display:flex; align-items:center;">
-                <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" style="width:30px; margin-right:10px;">
-                <span id="app-name"></span>
-            </div>
-            <button onclick="toggleChat()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold;">X</button>
+            <span>PANDA ASSISTANT</span>
+            <button onclick="closeChat()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold;">X</button>
         </div>
         <div id="chat-body"></div>
         <div id="input-area">
-            <input type="text" id="user-input" placeholder="Ketik pertanyaan..." onkeydown="handleEnter(event)">
+            <input type="text" id="user-input" placeholder="Ketik sesuatu..." onkeydown="handleChat(event)">
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbwcn1-_oGEwG-xWLlt-YdGXv-ti6mMxHMOBC9cNPBTKHoV0aed8Y1Zqs85tf3pKMZfsHg/exec";
+        let isWaitingForName = false;
+        let idleTimer;
+
+        function openChat() {
+            document.getElementById('panda-icon').style.display = 'none';
+            document.getElementById('panda-chat').classList.remove('hidden');
+            resetIdleTimer();
+        }
+
+        function closeChat() {
+            document.getElementById('panda-chat').classList.add('hidden');
+            document.getElementById('panda-icon').style.display = 'block';
+            clearTimeout(idleTimer);
+        }
+
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            // 300.000 milidetik = 5 menit
+            idleTimer = setTimeout(showTrivia, 300000); 
+        }
+
+        async function showTrivia() {
+            try {
+                const res = await fetch(GAS_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify({ question: "trivia_only" }) 
+                });
+                const data = await res.json();
+                const body = document.getElementById('chat-body');
+                body.innerHTML += `<div class="bubble panda" style="background:#e8f5e9; border:none; font-size:12px;">💡 <b>Tahukah kamu?</b><br>${data.trivia}</div>`;
+                body.scrollTop = body.scrollHeight;
+            } catch(e) {}
+        }
+
+        function addMessage(text, sender) {
+            const body = document.getElementById('chat-body');
+            body.innerHTML += `<div class="bubble ${sender}">${text}</div>`;
+            body.scrollTop = body.scrollHeight;
+            resetIdleTimer();
+        }
+
+        async function handleChat(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('user-input');
+                const val = input.value;
+                if (!val) return;
+
+                resetIdleTimer();
+
+                if (isWaitingForName) {
+                    localStorage.setItem('panda_user', val);
+                    isWaitingForName = false;
+                    addMessage(`Halo ${val}! Ada yang bisa Panda bantu?`, 'panda');
+                    input.value = '';
+                    return;
+                }
+
+                if (!localStorage.getItem('panda_user')) {
+                    addMessage(val, 'user');
+                    input.value = '';
+                    addMessage("Halo! Sebelum kita lanjut, boleh tahu siapa nama kamu?", 'panda');
+                    isWaitingForName = true;
+                    return;
+                }
+
+                addMessage(val, 'user');
+                input.value = '';
+                
+                const loader = document.createElement('div');
+                loader.className = 'typing';
+                loader.innerText = "Panda sedang mengetik...";
+                document.getElementById('chat-body').appendChild(loader);
+
+                try {
+                    const res = await fetch(GAS_URL, { 
+                        method: 'POST', 
+                        body: JSON.stringify({ 
+                            question: val, 
+                            userName: localStorage.getItem('panda_user') 
+                        }) 
+                    });
+                    const data = await res.json();
+                    loader.remove();
+                    addMessage(data.answer, 'panda');
+                } catch(err) {
+                    loader.remove();
+                    addMessage("Maaf, terjadi gangguan teknis.", 'panda');
+                }
+            }
+        }
+    </script>
 </body>
 </html>
