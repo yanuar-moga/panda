@@ -78,7 +78,7 @@
             const body = document.getElementById('chat-body');
             const div = document.createElement('div');
             div.className = `bubble ${sender}`;
-            div.innerHTML = text;
+            div.innerHTML = text || "<i>(Panda tidak memiliki respon)</i>";
             body.appendChild(div);
             body.scrollTop = body.scrollHeight;
             resetIdleTimer();
@@ -116,9 +116,14 @@
 
                 const res = await fetch(GAS_URL, { 
                     method: 'POST', 
+                    mode: 'no-cors', // Coba gunakan ini jika ada masalah CORS
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload) 
                 });
-                const data = await res.json();
+                
+                // Catatan: Karena Google Apps Script dengan mode-cors seringkali memerlukan 
+                // respon khusus, pastikan Anda menggunakan hasil json.
+                const data = await res.json().catch(() => ({ answer: "Maaf, respon server tidak valid." }));
                 
                 typing.remove();
                 addMessage(data.answer, 'panda');
