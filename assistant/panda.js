@@ -6,6 +6,9 @@ function setState(state) {
   const face = document.getElementById("panda-face");
   const dot = document.getElementById("status-dot");
 
+  // safety check (biar tidak error kalau DOM belum siap)
+  if (!face || !dot) return;
+
   switch (state) {
 
     case "idle":
@@ -32,7 +35,15 @@ function setState(state) {
       face.innerText = "😴";
       dot.style.background = "#90a4ae";
       break;
+
+    default:
+      face.innerText = "🐼";
+      dot.style.background = "#4caf50";
+      break;
   }
 }
 
+/* =========================
+   GLOBAL ACCESS
+========================= */
 window.setState = setState;
