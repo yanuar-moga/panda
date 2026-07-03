@@ -1,21 +1,140 @@
-:root { --primary: #2e7d32; }
+:root { 
+    --primary: #2e7d32; 
+    --primary-dark: #1b5e20;
+    --bg-bot: #e8f5e9;
+    --shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
 body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
 
-#panda-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; }
-#panda-btn { width: 65px; height: 65px; border-radius: 50%; background: var(--primary); color: white; border: none; font-size: 30px; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: transform 0.3s; }
-#panda-btn:hover { transform: scale(1.1); }
+#panda-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; align-items: flex-end;}
 
-#chat-window { width: 320px; height: 450px; background: #fff; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; }
-#chat-header { background: var(--primary); color: white; padding: 15px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
-#close-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+/* --- PANDA BUTTON WRAPPER --- */
+.panda-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
 
-#chat-messages { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-.msg { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 14px; line-height: 1.4; }
-.user { align-self: flex-end; background: var(--primary); color: white; }
-.bot { align-self: flex-start; background: #e8f5e9; color: #333; }
+/* Tooltip Text (muncul saat hover) */
+.tooltip-text {
+    background-color: #333;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-right: 10px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+}
 
-.input-area { display: flex; padding: 10px; border-top: 1px solid #eee; background: #f9f9f9; }
-#user-input { flex: 1; border: 1px solid #ddd; padding: 8px; border-radius: 8px; outline: none; }
-#send-btn { background: var(--primary); color: white; border: none; padding: 5px 15px; margin-left: 5px; border-radius: 8px; cursor: pointer; }
+.panda-wrapper:hover .tooltip-text {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* --- FLOATING BUTTON --- */
+#panda-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Animasi Idle: Bouncing pelan terus menerus */
+    animation: panda-idle 3s infinite ease-in-out;
+}
+
+#panda-btn:hover {
+    transform: scale(1.05) translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    animation: none; /* Hentikan animasi idle saat hover */
+}
+
+.panda-face {
+    font-size: 36px;
+    transition: transform 0.3s;
+}
+
+#panda-btn:active .panda-face {
+    transform: scale(0.9);
+}
+
+/* Keyframes untuk animasi Idle */
+@keyframes panda-idle {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* --- CHAT WINDOW --- */
+#chat-window {
+    width: 340px;
+    height: 500px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin-bottom: 20px;
+    /* Animasi muncul: Slide up + Fade in */
+    animation: chat-appear 0.4s ease-out;
+    transform-origin: bottom right;
+}
+
+@keyframes chat-appear {
+    from { opacity: 0; transform: scale(0.8) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
 .hidden { display: none !important; }
-#typing-indicator { font-size: 12px; color: #555; padding: 5px 15px; font-style: italic; }
+
+/* --- HEADER --- */
+#chat-header { background: var(--primary); color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; font-size: 16px; }
+.header-title { display: flex; align-items: center; gap: 10px; }
+.header-panda { font-size: 20px; }
+#close-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; line-height: 1; padding: 0; }
+#close-btn:hover { color: #ddd; }
+
+/* --- MESSAGES --- */
+#chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth; }
+.msg { padding: 12px 16px; border-radius: 15px; max-width: 75%; font-size: 14px; line-height: 1.5; position: relative; word-wrap: break-word; }
+.user { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 4px; animation: msg-appear 0.3s ease; }
+.bot { align-self: flex-start; background: var(--bg-bot); color: #333; border-bottom-left-radius: 4px; animation: msg-appear 0.3s ease; }
+
+@keyframes msg-appear {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- INPUT AREA --- */
+.input-area { display: flex; padding: 10px; border-top: 1px solid #eee; background: #f9f9f9; align-items: center; }
+#user-input { flex: 1; border: none; padding: 10px; border-radius: 10px; outline: none; background: white; font-size: 14px; border: 1px solid #eee; }
+#user-input:focus { border-color: var(--primary); }
+#send-btn { background: none; border: none; color: var(--primary); cursor: pointer; padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-left: 5px; transition: 0.2s; }
+#send-btn:hover { background-color: rgba(46, 125, 50, 0.1); color: var(--primary-dark); }
+#send-btn:disabled { color: #ccc; cursor: not-allowed; }
+
+/* --- TYPING INDICATOR (Dot Animation) --- */
+#typing-indicator { padding: 10px 20px; display: flex; gap: 5px; align-items: center; background: var(--bg-bot); align-self: flex-start; margin-left: 20px; border-radius: 15px; border-bottom-left-radius: 4px; margin-bottom: 10px;}
+.typing-dot { width: 8px; height: 8px; background: #888; border-radius: 50%; animation: typing-bounce 1.4s infinite ease-in-out both; }
+.typing-dot:nth-child(1) { animation-delay: -0.32s; }
+.typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing-bounce {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1.0); }
+}
+
+/* Responsif untuk Mobile */
+@media (max-width: 450px) {
+    #chat-window { width: 100%; height: 100%; bottom: 0; right: 0; border-radius: 20px 20px 0 0; }
+    #panda-container { bottom: 20px; right: 20px; }
+}
