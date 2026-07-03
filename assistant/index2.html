@@ -48,7 +48,7 @@
     </div>
 
     <script>
-        // GANTI URL INI DENGAN URL DEPLOYMENT WEB APP ANDA YANG BERAKHIR /exec
+        // ISI DENGAN URL DEPLOYMENT ANDA YANG BERAKHIR /exec
         const GAS_URL = "https://script.google.com/macros/s/AKfycbx8mlmRsU45nzxYof2tpdL-pynWVAzDxGX_5-zISbk7Ijm3R9RAAZqNpqd0Ds6Csdx3hw/exec";
         
         let isWaitingForName = false;
@@ -91,7 +91,6 @@
             const val = input.value.trim();
             if (!val) return;
 
-            console.log("Mengirim pesan:", val);
             addMessage(val, 'user');
             input.value = '';
 
@@ -119,36 +118,35 @@
 
                 const res = await fetch(GAS_URL, { 
                     method: 'POST',
-                    mode: 'no-cors', // Mode no-cors terkadang diperlukan untuk GAS
+                    mode: 'cors',
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                
-                // Jika pakai no-cors, kita tidak bisa ambil data .json() secara langsung.
-                // Jika ingin ambil data, ubah mode ke 'cors' dan pastikan di GAS ada header access-control-allow-origin
-                // Namun untuk setup sederhana, gunakan logik berikut:
-                
-                console.log("Fetch selesai.");
-                typing.remove();
-                
-                // Karena no-cors, kita simulasikan penerimaan data
-                // Jika Anda ingin data real, gunakan 'cors' dan atur header di GAS
-                addMessage("Pesan diterima server. (Pastikan URL & Access diatur ke Anyone)", 'panda');
 
+                const data = await res.json();
+                typing.remove();
+                addMessage(data.answer, 'panda');
+                
             } catch(err) {
                 console.error("Error Detail:", err);
                 typing.remove();
-                addMessage("Maaf, koneksi ke server gagal.", 'panda');
+                addMessage("Maaf, koneksi ke server gagal. Pastikan URL dan Izin Deployment (Anyone) sudah benar.", 'panda');
             }
         }
 
         function resetIdleTimer() {
             clearTimeout(idleTimer);
             idleTimer = setTimeout(async () => {
-                console.log("Idle timer aktif - memuat trivia...");
                 try {
-                    const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ question: "trivia_only" }) });
-                    // ... (logika trivia)
-                } catch(e) { console.log("Trivia gagal dimuat."); }
+                    const res = await fetch(GAS_URL, { 
+                        method: 'POST', 
+                        mode: 'cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ question: "trivia_only" }) 
+                    });
+                    const data = await res.json();
+                    if(data.trivia) addMessage(`💡 <b>Tahukah kamu?</b><br>${data.trivia}`, 'panda');
+                } catch(e) {}
             }, 300000); 
         }
 
