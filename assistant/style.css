@@ -9,52 +9,44 @@
     flex-direction: column;
     margin-bottom: 20px;
     animation: chat-appear 0.3s ease;
+    overflow: hidden; /* Penting agar isi tidak keluar kotak */
+    position: relative;
 }
 
-/* --- Header Chat - Dioptimalkan untuk logo & teks sejajar --- */
+/* --- Header Chat --- */
 #chat-header {
-    background: linear-gradient(to bottom, #2e7d32, #4caf50); /* Atau warna solid var(--primary) */
+    background: linear-gradient(to bottom, #2e7d32, #4caf50);
     color: white;
-    
-    /* Pengaturan Spacing Keseluruhan */
-    padding: 10px 20px;       /* Padding atas/bawah diperkecil agar header tidak terlalu tebal */
-    padding-top: 55px;        /* Padding atas besar untuk memberi ruang bagi logo yang turun */
-    
+    padding: 15px 15px 15px 85px; /* Padding kiri besar agar teks tidak nabrak logo */
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-weight: bold;
     position: relative;
+    height: 60px; /* Menentukan tinggi header secara konsisten */
     border-radius: 20px 20px 0 0;
 }
 
-/* --- Logo Chat - Diturunkan dan diberi presisi --- */
+/* --- Logo Chat (Nangkring) --- */
 .header-logo {
     width: 60px;
     height: 60px;
     border-radius: 50%;
     object-fit: cover;
     position: absolute;
-    
-    /* UBAH INI untuk menurunkan logo */
-    top: -15px;               /* Diturunkan agar bagian atas lingkaran tidak terlalu jauh di luar */
-    
-    left: 20px;
+    top: 15px;      /* Atur posisi vertikal di sini */
+    left: 15px;     /* Atur posisi horizontal di sini */
     border: 3px solid white;
     background: white;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     z-index: 10;
 }
 
-/* --- Judul Header - Teks & Logo sejajar sempurna --- */
+/* --- Judul Header --- */
 .header-title {
-    margin: 0;                /* Pastikan tidak ada margin */
-    padding: 0;               /* Pastikan tidak ada padding */
-    margin-left: 65px;        /* Sesuaikan jarak dari logo absolut */
-    
-    display: flex;            /* Ubah ke flexbox */
-    align-items: center;      /* Sejajarkan teks & logo secara vertikal */
-    gap: 12px;                /* Jarak horizontal yang rapi */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
 /* --- Teks Typewriter --- */
@@ -63,10 +55,7 @@
     overflow: hidden;
     border-right: 2px solid rgba(255,255,255,0.75);
     white-space: nowrap;
-    letter-spacing: 0.10em;
     animation: typing 2s steps(20, end), blink-caret 0.75s step-end infinite;
-    /* Sedikit tweak untuk penyesuaian visual jika perlu */
-    padding-top: 1px;         
 }
 
 /* --- Tombol Tutup --- */
@@ -76,7 +65,5 @@
     color: white;
     font-size: 24px;
     cursor: pointer;
-    padding: 0 10px;
-    /* Beri sedikit jarak dari kanan agar tidak terlalu nempel */
-    margin-right: -5px; 
+    line-height: 1;
 }
