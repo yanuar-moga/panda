@@ -5,22 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panda Assistant</title>
     <style>
-        /* CSS */
+        /* Logo Default */
         #panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999; }
         #panda-icon img { width: 70px; }
         
-        #panda-chat { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; z-index: 9999; }
+        /* Jendela Chat */
+        #panda-chat { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: visible; z-index: 9999; }
         .hidden { display: none !important; }
         
-        .header { background: #4CAF50; color: white; padding: 10px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; }
-        .header-logo { width: 30px; height: 30px; margin-right: 10px; }
+        /* Header dengan Logo Keluar */
+        .header { background: #4CAF50; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; position: relative; border-radius: 20px 20px 0 0; }
+        .header-logo { width: 70px; height: 70px; margin-right: 15px; border-radius: 50%; border: 3px solid white; margin-top: -40px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
         
         #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f0f2f5; display: flex; flex-direction: column; gap: 10px; }
         .bubble { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 14px; position: relative; word-wrap: break-word; }
         .panda { align-self: flex-start; background: white; border: 1px solid #ddd; border-bottom-left-radius: 2px; }
         .user { align-self: flex-end; background: #4CAF50; color: white; border-bottom-right-radius: 2px; }
         
-        #input-area { padding: 10px; background: white; border-top: 1px solid #ddd; }
+        #input-area { padding: 10px; background: white; border-top: 1px solid #ddd; border-radius: 0 0 20px 20px; }
         #user-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
     </style>
 </head>
@@ -36,7 +38,7 @@
                 <img src="https://yanuar-moga.github.io/panda/assistant/assets/mypanda.png" class="header-logo">
                 <span id="app-name"></span>
             </div>
-            <button onclick="closeChat()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold;">X</button>
+            <button onclick="closeChat()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold; margin-top:-30px;">X</button>
         </div>
         <div id="chat-body"></div>
         <div id="input-area">
@@ -53,16 +55,20 @@
             document.getElementById('panda-icon').style.display = 'none';
             document.getElementById('panda-chat').classList.remove('hidden');
             
-            // Efek Typewriter
-            const text = "PANDA ASSISTANT";
             const el = document.getElementById('app-name');
             el.innerText = "";
+            const text = "PANDA ASSISTANT";
             let i = 0;
-            function type() {
-                if (i < text.length) { el.innerText += text.charAt(i); i++; setTimeout(type, 100); }
-            }
+            function type() { if(i < text.length) { el.innerText += text.charAt(i); i++; setTimeout(type, 100); } }
             type();
             
+            // Cek apakah sudah kenal nama
+            if (!localStorage.getItem('panda_user')) {
+                addMessage("Halo! Saya Panda. Sebelum kita lanjut, boleh tahu siapa nama kamu?", 'panda');
+                isWaitingForName = true;
+            } else {
+                addMessage(`Halo ${localStorage.getItem('panda_user')}! Ada yang bisa dibantu?`, 'panda');
+            }
             resetIdleTimer();
         }
 
@@ -99,25 +105,14 @@
 
                 resetIdleTimer();
 
-                // 1. Logika Nama
                 if (isWaitingForName) {
                     localStorage.setItem('panda_user', val);
                     isWaitingForName = false;
-                    addMessage(`Halo ${val}! Ada yang bisa Panda bantu?`, 'panda');
+                    addMessage(`Halo ${val}! Senang bertemu denganmu. Apa yang ingin ditanyakan?`, 'panda');
                     input.value = '';
                     return;
                 }
 
-                // 2. Jika user baru pertama kali chat
-                if (!localStorage.getItem('panda_user')) {
-                    addMessage(val, 'user');
-                    input.value = '';
-                    addMessage("Halo! Sebelum kita lanjut, boleh tahu siapa nama kamu?", 'panda');
-                    isWaitingForName = true;
-                    return;
-                }
-
-                // 3. Proses Chat Biasa
                 addMessage(val, 'user');
                 input.value = '';
                 
