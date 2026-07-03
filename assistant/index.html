@@ -35,9 +35,7 @@
             padding: 10px 14px; margin: 8px 15px; border-radius: 15px; 
             max-width: 80%; font-size: 14.5px; line-height: 1.4; position: relative; word-wrap: break-word;
         }
-        .bubble::after {
-            content: ""; position: absolute; bottom: 0; width: 15px; height: 15px;
-        }
+        .bubble::after { content: ""; position: absolute; bottom: 0; width: 15px; height: 15px; }
 
         .panda { background: white; align-self: flex-start; border-bottom-left-radius: 0; color: #303030; }
         .panda::after { left: -7px; background: white; clip-path: polygon(0 100%, 100% 100%, 100% 0); }
@@ -67,13 +65,14 @@
         </div>
         <div id="chat-body"></div>
         <div id="input-area">
-            <input type="text" id="user-input" placeholder="Tanya sesuatu..." onkeydown="if(event.key==='Enter') sendMessage()">
+            <input type="text" id="user-input" placeholder="Ketik pesan..." onkeydown="if(event.key==='Enter') sendMessage()">
             <button id="send-btn" onclick="sendMessage()">➤</button>
         </div>
     </div>
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzMe6SvN_qVVUG48vkCoMphQINZRV3BU_7nEz8cyO13Y5a5iC7xRQD9eH1lFRGwsi8ZNw/exec";
+        let isWaitingForName = false;
         let typeTimer;
 
         function startTypewriter() {
@@ -95,8 +94,15 @@
             chat.classList.remove('hidden', 'closing');
             chat.classList.add('open');
             startTypewriter();
+            
             if (document.getElementById('chat-body').innerHTML === "") {
-                addMessage("Halo! Saya Panda. Ada yang bisa saya bantu?", 'panda');
+                const savedName = localStorage.getItem('panda_user');
+                if (savedName) {
+                    addMessage(`Halo kembali ${savedName}! Ada yang bisa saya bantu?`, 'panda');
+                } else {
+                    addMessage("Halo! Saya Panda. Siapa nama kamu?", 'panda');
+                    isWaitingForName = true;
+                }
             }
         }
 
@@ -129,13 +135,20 @@
             addMessage(val, 'user');
             input.value = '';
 
+            if (isWaitingForName) {
+                localStorage.setItem('panda_user', val);
+                isWaitingForName = false;
+                addMessage(`Halo ${val}! Apa yang ingin ditanyakan?`, 'panda');
+                return;
+            }
+
             const typing = document.createElement('div');
             typing.className = 'bubble panda';
             typing.innerHTML = "<i>Panda sedang mengetik...</i>";
             document.getElementById('chat-body').appendChild(typing);
 
             try {
-                const url = `${GAS_URL}?question=${encodeURIComponent(val)}&userName=Pengunjung`;
+                const url = `${GAS_URL}?question=${encodeURIComponent(val)}&userName=${encodeURIComponent(localStorage.getItem('panda_user') || 'Pengunjung')}`;
                 const res = await fetch(url, { method: 'GET' });
                 const data = await res.json();
                 
