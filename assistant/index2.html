@@ -4,31 +4,33 @@
     <meta charset="UTF-8">
     <title>Panda Assistant</title>
     <style>
-        body { font-family: sans-serif; }
-        #panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; }
-        #panda-chat { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: white; border: 1px solid #ccc; display: flex; flex-direction: column; z-index: 9999; }
-        .hidden { display: none; }
-        #chat-body { flex: 1; padding: 10px; overflow-y: auto; background: #e5ddd5; }
-        .bubble { padding: 8px; margin: 5px; border-radius: 10px; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        #panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999; }
+        #panda-chat { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; z-index: 9999; }
+        .hidden { display: none !important; }
+        #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #e5ddd5; }
+        .bubble { padding: 8px 12px; margin: 5px; border-radius: 10px; font-size: 14px; max-width: 80%; }
         .panda { background: white; align-self: flex-start; }
-        .user { background: #dcf8c6; align-self: flex-end; text-align: right; }
+        .user { background: #dcf8c6; align-self: flex-end; margin-left: auto; }
+        #input-area { padding: 10px; background: white; display: flex; }
+        input { flex: 1; padding: 8px; border-radius: 10px; border: 1px solid #ccc; }
     </style>
 </head>
 <body>
 
-    <div id="panda-icon" onclick="openChat()">Chat Panda</div>
+    <div id="panda-icon" onclick="openChat()">💬 Panda</div>
 
     <div id="panda-chat" class="hidden">
         <div id="chat-body"></div>
         <div id="input-area">
-            <input type="text" id="user-input">
+            <input type="text" id="user-input" placeholder="Tanya sesuatu...">
             <button onclick="sendMessage()">Kirim</button>
         </div>
     </div>
 
     <script>
-        // GANTI DENGAN URL DEPLOYMENT BARU ANDA
-        const GAS_URL = "ISI_URL_DEPLOYMENT_ANDA_DISINI";
+        // GANTI DENGAN URL DEPLOYMENT BARU ANDA (yang berakhiran /exec)
+        const GAS_URL = "https://script.google.com/macros/s/AKfycbzMe6SvN_qVVUG48vkCoMphQINZRV3BU_7nEz8cyO13Y5a5iC7xRQD9eH1lFRGwsi8ZNw/exec";
 
         function openChat() {
             document.getElementById('panda-chat').classList.remove('hidden');
@@ -49,13 +51,15 @@
             input.value = '';
 
             try {
-                // Mengirim sebagai GET parameter
+                // Menggunakan metode GET untuk menghindari CORS
                 const url = `${GAS_URL}?question=${encodeURIComponent(val)}&userName=Pengunjung`;
                 const res = await fetch(url, { method: 'GET' });
                 const data = await res.json();
+                
                 addMessage(data.answer, 'panda');
             } catch(err) {
-                addMessage("Koneksi gagal.", 'panda');
+                addMessage("Maaf, koneksi ke server gagal.", 'panda');
+                console.error(err);
             }
         }
     </script>
