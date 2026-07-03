@@ -1,4 +1,4 @@
-const SCRIPT_URL = "YOUR_GAS_URL"; // Ganti dengan URL Web App Anda
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5phe5kCec9ipOW2OO1UzH4NW3j7cgdcY5rgS2dW9rjB2uEXwW3kf15X1arrXp4PMjKw/exec"; // Ganti dengan URL Web App Anda
 let faqData = [];
 
 // Fetch data saat halaman dimuat
