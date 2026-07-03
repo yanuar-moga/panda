@@ -1,101 +1,86 @@
-window.onload = () => {
+let chatOpen = false;
 
-  setState("idle");
+/* =====================
+   TOGGLE CHAT
+===================== */
+function toggleChat() {
 
-  startBlinkSystem();
-  startIdleSystem();
-  startActivityListener();
-};
+  const panel = document.getElementById("chat-panel");
 
-/* =========================
-   BLINK SYSTEM
-========================= */
-function startBlinkSystem() {
-  setInterval(() => {
-    blink();
-  }, random(2500, 4500));
-}
+  chatOpen = !chatOpen;
 
-function blink() {
-  const eyeL = document.getElementById("eyeL");
-  const eyeR = document.getElementById("eyeR");
+  panel.classList.toggle("hidden");
 
-  if (currentState === "sleep") return;
-
-  // tutup mata
-  eyeL.setAttribute("ry", "2");
-  eyeR.setAttribute("ry", "2");
-
-  setTimeout(() => {
-    if (currentState !== "sleep") {
-      eyeL.setAttribute("ry", "15");
-      eyeR.setAttribute("ry", "15");
-    }
-  }, 150);
-}
-
-/* =========================
-   IDLE SYSTEM
-========================= */
-let idleTime = 0;
-let idleInterval;
-let currentState = "idle";
-
-function startIdleSystem() {
-
-  idleInterval = setInterval(() => {
-
-    idleTime++;
-
-    // 10 detik tidak aktif → thinking
-    if (idleTime === 10) {
-      setState("thinking");
-    }
-
-    // 20 detik → sleep
-    if (idleTime >= 20) {
-      setState("sleep");
-    }
-
-  }, 1000);
-}
-
-/* =========================
-   USER ACTIVITY DETECTOR
-========================= */
-function startActivityListener() {
-
-  const events = ["mousemove", "keydown", "click", "touchstart"];
-
-  events.forEach(ev => {
-    document.addEventListener(ev, wakeUp);
-  });
-}
-
-function wakeUp() {
-
-  idleTime = 0;
-
-  if (currentState === "sleep") {
+  if (chatOpen) {
+    setState("happy");
+  } else {
     setState("idle");
   }
 }
 
-/* =========================
-   STATE CONTROL WRAPPER
-========================= */
-function setState(state) {
+/* =====================
+   SEND MESSAGE
+===================== */
+function sendMessage() {
 
-  currentState = state;
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
 
-  if (typeof window.setState === "function") {
-    window.setState(state); 
-  }
+  if (!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+
+  setState("thinking");
+
+  setTimeout(() => {
+
+    const answer = getAnswer(text);
+
+    if (answer) {
+      addMessage(answer, "bot");
+      setState("happy");
+    } else {
+      addMessage("Maaf, saya belum menemukan informasi itu.", "bot");
+      setState("sad");
+    }
+
+  }, 600);
 }
 
-/* =========================
-   UTILITY
-========================= */
-function random(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+/* =====================
+   SIMPLE AI (LOCAL DB)
+===================== */
+function getAnswer(text) {
+
+  const db = [
+    { q: "jam masuk", a: "Jam masuk pukul 07.00 WIB." },
+    { q: "ppdb", a: "Info PPDB ada di menu website sekolah." },
+    { q: "kepala sekolah", a: "Kepala SMPN 1 Moga adalah ..." }
+  ];
+
+  text = text.toLowerCase();
+
+  for (let item of db) {
+    if (text.includes(item.q)) {
+      return item.a;
+    }
+  }
+
+  return null;
+}
+
+/* =====================
+   CHAT UI
+===================== */
+function addMessage(text, type) {
+
+  const box = document.getElementById("chat-box");
+
+  const div = document.createElement("div");
+  div.classList.add("msg", type);
+  div.innerText = text;
+
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
 }
