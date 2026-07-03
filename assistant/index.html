@@ -38,10 +38,25 @@
         .header { background: #075E54; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-radius: 20px 20px 0 0; }
         .header-logo { width: 60px; margin-right: 10px; margin-top: -30px; }
         
-        #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #e5ddd5; }
-        .bubble { padding: 8px 12px; margin: 5px; border-radius: 10px; max-width: 85%; font-size: 14.5px; line-height: 1.4; }
-        .panda { background: white; align-self: flex-start; }
-        .user { background: #dcf8c6; align-self: flex-end; }
+        #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #e5ddd5; display: flex; flex-direction: column; }
+        
+        /* Balon Chat */
+        .bubble { 
+            padding: 10px 14px; margin: 8px 15px; border-radius: 15px; 
+            max-width: 80%; font-size: 14.5px; line-height: 1.4; position: relative; word-wrap: break-word;
+        }
+        
+        /* Ekor Balon (Tanda Panah) */
+        .bubble::after {
+            content: ""; position: absolute; width: 0; height: 0;
+            border: 10px solid transparent; top: 5px;
+        }
+
+        .panda { background: white; align-self: flex-start; border-top-left-radius: 0; color: #303030; }
+        .panda::after { left: -15px; border-right-color: white; border-left: 0; }
+
+        .user { background: #dcf8c6; align-self: flex-end; border-top-right-radius: 0; color: #303030; }
+        .user::after { right: -15px; border-left-color: #dcf8c6; border-right: 0; }
         
         #input-area { padding: 10px; background: white; display: flex; border-radius: 0 0 20px 20px; align-items: center; }
         #user-input { flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #ddd; outline: none; }
@@ -71,7 +86,6 @@
     </div>
 
     <script>
-        // GANTI DENGAN URL DEPLOYMENT BARU ANDA (yang berakhiran /exec)
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzMe6SvN_qVVUG48vkCoMphQINZRV3BU_7nEz8cyO13Y5a5iC7xRQD9eH1lFRGwsi8ZNw/exec";
 
         function openChat() {
@@ -100,7 +114,7 @@
             const body = document.getElementById('chat-body');
             const div = document.createElement('div');
             div.className = `bubble ${sender}`;
-            div.innerHTML = text;
+            div.innerText = text;
             body.appendChild(div);
             body.scrollTop = body.scrollHeight;
         }
@@ -117,9 +131,9 @@
             typing.className = 'bubble panda';
             typing.innerHTML = "<i>Panda sedang mengetik...</i>";
             document.getElementById('chat-body').appendChild(typing);
+            document.getElementById('chat-body').scrollTop = document.getElementById('chat-body').scrollHeight;
 
             try {
-                // Menggunakan metode GET
                 const url = `${GAS_URL}?question=${encodeURIComponent(val)}&userName=Pengunjung`;
                 const res = await fetch(url, { method: 'GET' });
                 const data = await res.json();
