@@ -1,30 +1,77 @@
 body {
   margin: 0;
-  font-family: Arial;
-  background: #eef5ef;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #eaf7ee, #f6fbf7);
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
 }
 
+/* KARTU UTAMA */
 .container {
   width: 360px;
-  background: white;
-  border-radius: 20px;
-  padding: 30px;
+  background: #ffffff;
+  border-radius: 22px;
+  padding: 30px 25px;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+  animation: fadeIn 0.6s ease;
+  position: relative;
 }
 
+/* AREA PANDA */
 #panda-area {
-  height: 200px;
+  height: 220px;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
+/* SVG PANDA */
 #panda {
-  font-size: 100px;
-  transition: all 0.3s ease;
+  width: 180px;
+  height: 180px;
+  transition: transform 0.25s ease;
+  transform-origin: center;
+  animation: breathe 3.5s infinite ease-in-out;
+}
+
+/* STATUS TEXT */
+#status {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #444;
+  min-height: 20px;
+}
+
+/* ANIMASI NAFAS (HIDUP) */
+@keyframes breathe {
+  0%   { transform: translateY(0px) scale(1); }
+  50%  { transform: translateY(-4px) scale(1.01); }
+  100% { transform: translateY(0px) scale(1); }
+}
+
+/* FADE IN CONTAINER */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* BLINK EFFECT (dipakai JS) */
+.blink {
+  transform: scaleY(0.1);
+  transition: transform 0.12s ease;
+}
+
+/* SEDIKIT GLOW SAAT THINKING */
+.thinking {
+  filter: brightness(0.98);
+}
+
+/* SLEEP MODE (gelap lembut) */
+.sleep {
+  filter: grayscale(0.3) brightness(0.9);
 }
