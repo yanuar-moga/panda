@@ -30,7 +30,6 @@
         
         #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #e5ddd5; display: flex; flex-direction: column; }
         
-        /* Balon Chat dengan Ekor di Bawah */
         .bubble { 
             padding: 10px 14px; margin: 8px 15px; border-radius: 15px; 
             max-width: 80%; font-size: 14.5px; line-height: 1.4; position: relative; word-wrap: break-word;
@@ -72,6 +71,7 @@
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzMe6SvN_qVVUG48vkCoMphQINZRV3BU_7nEz8cyO13Y5a5iC7xRQD9eH1lFRGwsi8ZNw/exec";
+        
         let isWaitingForName = false;
         let typeTimer;
 
@@ -99,6 +99,7 @@
                 const savedName = localStorage.getItem('panda_user');
                 if (savedName) {
                     addMessage(`Halo kembali ${savedName}! Ada yang bisa saya bantu?`, 'panda');
+                    isWaitingForName = false;
                 } else {
                     addMessage("Halo! Saya Panda. Siapa nama kamu?", 'panda');
                     isWaitingForName = true;
@@ -146,6 +147,7 @@
             typing.className = 'bubble panda';
             typing.innerHTML = "<i>Panda sedang mengetik...</i>";
             document.getElementById('chat-body').appendChild(typing);
+            document.getElementById('chat-body').scrollTop = document.getElementById('chat-body').scrollHeight;
 
             try {
                 const url = `${GAS_URL}?question=${encodeURIComponent(val)}&userName=${encodeURIComponent(localStorage.getItem('panda_user') || 'Pengunjung')}`;
