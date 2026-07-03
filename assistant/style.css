@@ -1,77 +1,119 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #eaf7ee, #f6fbf7);
+  background: #eef5ef;
+}
+
+/* =====================
+   CHAT PANEL
+===================== */
+#chat-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 320px;
+  height: 420px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.2);
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  flex-direction: column;
   overflow: hidden;
+  z-index: 9999;
 }
 
-/* KARTU UTAMA */
-.container {
-  width: 360px;
-  background: #ffffff;
-  border-radius: 22px;
-  padding: 30px 25px;
-  text-align: center;
-  box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-  animation: fadeIn 0.6s ease;
-  position: relative;
+.hidden {
+  display: none;
 }
 
-/* AREA PANDA */
-#panda-area {
-  height: 220px;
+#chat-header {
+  background: #2e7d32;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#chat-box {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 13px;
+}
+
+.msg {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 10px;
+}
+
+.user {
+  background: #dff5e1;
+  text-align: right;
+}
+
+.bot {
+  background: #f2f2f2;
+}
+
+.input-area {
+  display: flex;
+  border-top: 1px solid #ddd;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+
+.input-area button {
+  background: #2e7d32;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+/* =====================
+   FLOATING PANDA
+===================== */
+#sipanda-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
+  cursor: pointer;
+  z-index: 10000;
+  animation: float 3s ease-in-out infinite;
 }
 
-/* SVG PANDA */
-#panda {
-  width: 180px;
-  height: 180px;
-  transition: transform 0.25s ease;
-  transform-origin: center;
-  animation: breathe 3.5s infinite ease-in-out;
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
 }
 
-/* STATUS TEXT */
-#status {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #444;
-  min-height: 20px;
+#panda-face {
+  font-size: 32px;
+  transition: 0.3s;
 }
 
-/* ANIMASI NAFAS (HIDUP) */
-@keyframes breathe {
-  0%   { transform: translateY(0px) scale(1); }
-  50%  { transform: translateY(-4px) scale(1.01); }
-  100% { transform: translateY(0px) scale(1); }
-}
-
-/* FADE IN CONTAINER */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* BLINK EFFECT (dipakai JS) */
-.blink {
-  transform: scaleY(0.1);
-  transition: transform 0.12s ease;
-}
-
-/* SEDIKIT GLOW SAAT THINKING */
-.thinking {
-  filter: brightness(0.98);
-}
-
-/* SLEEP MODE (gelap lembut) */
-.sleep {
-  filter: grayscale(0.3) brightness(0.9);
+#status-dot {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 10px;
+  height: 10px;
+  background: #4caf50;
+  border-radius: 50%;
 }
