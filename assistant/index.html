@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panda Assistant</title>
     <style>
-        /* Mengatur font agar terlihat seperti WhatsApp */
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         
         #panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999; }
@@ -26,7 +24,6 @@
         
         #input-area { display: flex; padding: 10px; background: white; border-top: 1px solid #ddd; border-radius: 0 0 20px 20px; align-items: center; }
         #user-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; margin-right: 10px; }
-        /* Ikon kirim lebih menarik */
         #send-btn { background: none; border: none; color: #075E54; font-size: 24px; cursor: pointer; transition: 0.2s; padding: 0 5px; }
         #send-btn:hover { transform: scale(1.1); color: #128C7E; }
     </style>
@@ -53,25 +50,29 @@
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbwcn1-_oGEwG-xWLlt-YdGXv-ti6mMxHMOBC9cNPBTKHoV0aed8Y1Zqs85tf3pKMZfsHg/exec";
         let isWaitingForName = false;
+        let idleTimer, typeTimer;
 
         function openChat() {
             document.getElementById('panda-icon').style.display = 'none';
             document.getElementById('panda-chat').classList.remove('hidden');
             
+            // Loop Typewriter
             const el = document.getElementById('app-name');
             let text = "PANDA ASSISTANT   ";
             let i = 0;
             function type() {
                 el.innerText = text.substring(0, i);
                 i = (i + 1) % (text.length + 1);
-                setTimeout(type, 150);
+                typeTimer = setTimeout(type, 150);
             }
+            clearTimeout(typeTimer);
             type();
             
             if (document.getElementById('chat-body').innerHTML === "") {
                 addMessage("Halo! Saya Panda. Siapa nama kamu?", 'panda');
                 isWaitingForName = true;
             }
+            resetIdleTimer();
         }
 
         function addMessage(text, sender) {
@@ -81,6 +82,7 @@
             div.innerHTML = text;
             body.appendChild(div);
             body.scrollTop = body.scrollHeight;
+            resetIdleTimer();
         }
 
         async function sendMessage() {
@@ -118,9 +120,19 @@
             }
         }
 
+        function resetIdleTimer() {
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(async () => {
+                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ question: "trivia_only" }) });
+                const data = await res.json();
+                addMessage(`💡 <b>Tahukah kamu?</b><br>${data.trivia}`, 'panda');
+            }, 300000); // 5 menit
+        }
+
         function closeChat() {
             document.getElementById('panda-chat').classList.add('hidden');
             document.getElementById('panda-icon').style.display = 'block';
+            clearTimeout(typeTimer);
         }
     </script>
 </body>
