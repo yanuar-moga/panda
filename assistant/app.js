@@ -6,29 +6,48 @@ let chatOpen = false;
 /* =========================
    LOAD DATABASE FROM SHEETS
 ========================= */
-fetch(API_URL)
-  .then(res => res.json())
-  .then(data => {
-    faqData = data;
+async function loadData() {
+  try {
+    const res = await fetch(API_URL);
+    faqData = await res.json();
     console.log("SIPANDA DB loaded:", faqData);
-  })
-  .catch(err => console.error("Load error:", err));
+  } catch (err) {
+    console.error("Load error:", err);
+  }
+}
+
+loadData();
 
 /* =========================
    TOGGLE CHAT PANEL
+   (FIX: panda hilang saat open)
 ========================= */
 function toggleChat() {
 
   const panel = document.getElementById("chat-panel");
+  const panda = document.getElementById("sipanda-float");
 
   chatOpen = !chatOpen;
 
-  panel.classList.toggle("hidden");
-
   if (chatOpen) {
+    panel.classList.remove("hidden");
+    panda.classList.add("hidden"); // 🐼 HILANG saat chat terbuka
     setState("happy");
   } else {
+    panel.classList.add("hidden");
+    panda.classList.remove("hidden"); // 🐼 MUNCUL lagi
     setState("idle");
+  }
+}
+
+/* =========================
+   ENTER HANDLER
+   (FIX: auto send message)
+========================= */
+function handleEnter(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    sendMessage();
   }
 }
 
@@ -73,7 +92,7 @@ function getAnswer(text) {
 
     if (!item) continue;
 
-    // PRIORITY 1: keyword
+    // PRIORITY 1: keyword match
     if (item.keyword) {
 
       const keys = item.keyword.toLowerCase().split(";");
@@ -95,7 +114,7 @@ function getAnswer(text) {
 }
 
 /* =========================
-   CHAT UI
+   CHAT UI RENDER
 ========================= */
 function addMessage(text, type) {
 
