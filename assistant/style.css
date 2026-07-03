@@ -13,16 +13,23 @@ body { font-family: 'Segoe UI', sans-serif; margin: 0; }
 .panda-wrapper:hover .tooltip-text { opacity: 1; visibility: visible; }
 
 /* Jendela Chat */
-#chat-window { width: 340px; height: 500px; background: white; border-radius: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; overflow: hidden; margin-bottom: 20px; animation: chat-appear 0.3s ease; }
+#chat-window { width: 340px; height: 500px; background: white; border-radius: 20px; box-shadow: var(--shadow); display: flex; flex-direction: column; /* Hapus overflow: hidden agar logo bisa tampil */ margin-bottom: 20px; animation: chat-appear 0.3s ease; }
 @keyframes chat-appear { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
 .hidden { display: none !important; }
 
-/* Header dengan Panda Nangkring */
-#chat-header { background: var(--primary); color: white; padding: 15px 20px; padding-top: 40px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; position: relative; }
-.header-logo { width: 60px; height: 60px; border-radius: 50%; object-fit: cover; position: absolute; top: -30px; left: 20px; border: 3px solid white; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); z-index: 10; }
-.header-title { margin-left: 60px; display: flex; align-items: center; }
+/* Header - Diperbaiki agar logo tidak terpotong */
+#chat-header { background: var(--primary); color: white; padding: 15px 20px; padding-top: 45px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; position: relative; border-radius: 20px 20px 0 0; }
 
-#close-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; }
+.header-logo { 
+    width: 60px; height: 60px; border-radius: 50%; object-fit: cover; 
+    position: absolute; top: -30px; left: 20px; 
+    border: 3px solid white; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.2); 
+    z-index: 10; 
+}
+
+.header-title { margin-left: 65px; display: flex; align-items: center; gap: 10px; }
+
+#close-btn { background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0 10px; }
 
 /* Isi Chat */
 #chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
