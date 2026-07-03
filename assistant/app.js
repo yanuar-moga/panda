@@ -15,11 +15,22 @@ const sendBtn = document.getElementById('send-btn');
 const msgBox = document.getElementById('chat-messages');
 const typing = document.getElementById('typing-indicator');
 
+// Fungsi untuk membuka/menutup chat dengan animasi
 function toggleChat() {
-    chatWindow.classList.toggle('hidden');
-    pandaBtn.classList.toggle('hidden');
+    const isHidden = chatWindow.classList.contains('hidden');
+    
+    if (isHidden) {
+        // Chat mau dibuka
+        chatWindow.classList.remove('hidden');
+        pandaBtn.classList.add('hidden'); // Tombol panda utama hilang
+    } else {
+        // Chat mau ditutup
+        chatWindow.classList.add('hidden');
+        pandaBtn.classList.remove('hidden'); // Tombol panda utama muncul kembali
+    }
 }
 
+// Event Listener
 pandaBtn.onclick = toggleChat;
 closeBtn.onclick = toggleChat;
 
@@ -27,16 +38,25 @@ function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
     
+    // Tampil pesan user
     addMsg(text, 'user');
     input.value = '';
+    
+    // Disable input & tombol saat loading
+    input.disabled = true;
+    sendBtn.disabled = true;
+    
+    // Tampil typing indikator
     typing.classList.remove('hidden');
-    msgBox.scrollTop = msgBox.scrollHeight;
+    scrollToBottom();
 
+    // Simulasi berpikir bot (delay)
     setTimeout(() => {
+        // Sembunyikan typing indikator
         typing.classList.add('hidden');
-        const query = text.toLowerCase();
         
-        // Logika Pencarian: Keyword dipisah koma atau cocok dengan pertanyaan
+        // Logika Pencarian
+        const query = text.toLowerCase();
         const found = faqData.find(item => {
             const keys = item.keyword ? item.keyword.split(',').map(k => k.trim().toLowerCase()) : [];
             const matchKey = keys.some(k => query.includes(k));
@@ -44,9 +64,16 @@ function sendMessage() {
             return matchKey || matchQuest;
         });
         
-        addMsg(found ? found.answer : "Maaf, SIPANDA belum mengerti. Coba tanya hal lain tentang sekolah ya!", 'bot');
-        msgBox.scrollTop = msgBox.scrollHeight;
-    }, 1500);
+        // Tampil jawaban bot
+        const botResponse = found ? found.answer : "Maaf, SIPANDA belum mengerti. Coba tanya hal lain tentang sekolah ya!";
+        addMsg(botResponse, 'bot');
+        
+        // Re-enable input & tombol
+        input.disabled = false;
+        sendBtn.disabled = false;
+        input.focus(); // Fokus kembali ke input
+        scrollToBottom();
+    }, 1500); // Waktu delay berpikir (1.5 detik)
 }
 
 function addMsg(text, sender) {
@@ -56,5 +83,9 @@ function addMsg(text, sender) {
     msgBox.appendChild(div);
 }
 
-sendBtn.onclick = sendMessage;
+function scrollToBottom() {
+    msgBox.scrollTop = msgBox.scrollHeight;
+}
+
+// Event Enter pada keyboard
 input.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
