@@ -15,26 +15,30 @@
   <!-- CHAT PANEL -->
   <div id="chat-panel" class="hidden">
 
+    <!-- HEADER -->
     <div id="chat-header">
       🐼 SIPANDA Assistant
       <span onclick="toggleChat()" style="cursor:pointer;">✖</span>
     </div>
 
+    <!-- CHAT BOX -->
     <div id="chat-box"></div>
 
+    <!-- INPUT AREA -->
     <div class="input-area">
       <input 
         id="userInput" 
         type="text" 
         placeholder="Tulis pesan..." 
         onkeydown="handleEnter(event)"
+        autocomplete="off"
       />
       <button onclick="sendMessage()">➤</button>
     </div>
 
   </div>
 
-  <!-- FLOATING PANDA BUTTON -->
+  <!-- FLOATING PANDA -->
   <div id="sipanda-float" onclick="toggleChat()">
 
     <div id="panda-face">🐼</div>
