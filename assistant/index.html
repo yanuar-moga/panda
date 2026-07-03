@@ -7,18 +7,8 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
-        /* Animasi Slide Up Smooth */
-        @keyframes slideUp { 
-            from { transform: translateY(100%); opacity: 0; } 
-            to { transform: translateY(0); opacity: 1; } 
-        }
-
-        /* Animasi TV Mati Smooth */
-        @keyframes tvOff { 
-            0% { transform: scale(1, 1); opacity: 1; filter: brightness(1); } 
-            50% { transform: scale(1, 0.05); filter: brightness(5); } 
-            100% { transform: scale(0.01, 0); opacity: 0; filter: brightness(0); } 
-        }
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes tvOff { 0% { transform: scale(1, 1); opacity: 1; filter: brightness(1); } 50% { transform: scale(1, 0.05); filter: brightness(5); } 100% { transform: scale(0.01, 0); opacity: 0; filter: brightness(0); } }
 
         #panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999; }
         #panda-icon img { width: 70px; transition: transform 0.2s; }
@@ -40,23 +30,20 @@
         
         #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #e5ddd5; display: flex; flex-direction: column; }
         
-        /* Balon Chat */
+        /* Balon Chat dengan Ekor di Bawah */
         .bubble { 
             padding: 10px 14px; margin: 8px 15px; border-radius: 15px; 
             max-width: 80%; font-size: 14.5px; line-height: 1.4; position: relative; word-wrap: break-word;
         }
-        
-        /* Ekor Balon (Tanda Panah) */
         .bubble::after {
-            content: ""; position: absolute; width: 0; height: 0;
-            border: 10px solid transparent; top: 5px;
+            content: ""; position: absolute; bottom: 0; width: 15px; height: 15px;
         }
 
-        .panda { background: white; align-self: flex-start; border-top-left-radius: 0; color: #303030; }
-        .panda::after { left: -15px; border-right-color: white; border-left: 0; }
+        .panda { background: white; align-self: flex-start; border-bottom-left-radius: 0; color: #303030; }
+        .panda::after { left: -7px; background: white; clip-path: polygon(0 100%, 100% 100%, 100% 0); }
 
-        .user { background: #dcf8c6; align-self: flex-end; border-top-right-radius: 0; color: #303030; }
-        .user::after { right: -15px; border-left-color: #dcf8c6; border-right: 0; }
+        .user { background: #dcf8c6; align-self: flex-end; border-bottom-right-radius: 0; color: #303030; }
+        .user::after { right: -7px; background: #dcf8c6; clip-path: polygon(0 100%, 100% 100%, 0 0); }
         
         #input-area { padding: 10px; background: white; display: flex; border-radius: 0 0 20px 20px; align-items: center; }
         #user-input { flex: 1; padding: 10px; border-radius: 20px; border: 1px solid #ddd; outline: none; }
@@ -74,7 +61,7 @@
         <div class="header">
             <div style="display:flex; align-items:center;">
                 <img src="https://yanuar-moga.github.io/panda/assistant/assets/mypanda.png" class="header-logo">
-                <span id="app-name">Panda Assistant</span>
+                <span id="app-name" style="font-weight:600; font-size:15px;"></span>
             </div>
             <button onclick="closeChat()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">×</button>
         </div>
@@ -87,6 +74,19 @@
 
     <script>
         const GAS_URL = "https://script.google.com/macros/s/AKfycbzMe6SvN_qVVUG48vkCoMphQINZRV3BU_7nEz8cyO13Y5a5iC7xRQD9eH1lFRGwsi8ZNw/exec";
+        let typeTimer;
+
+        function startTypewriter() {
+            const el = document.getElementById('app-name');
+            const text = "PANDA ASSISTANT   ";
+            let i = 0;
+            function type() {
+                el.innerText = text.substring(0, i);
+                i = (i + 1) % (text.length + 1);
+                typeTimer = setTimeout(type, 150);
+            }
+            type();
+        }
 
         function openChat() {
             document.getElementById('sound-open').play();
@@ -94,6 +94,7 @@
             const chat = document.getElementById('panda-chat');
             chat.classList.remove('hidden', 'closing');
             chat.classList.add('open');
+            startTypewriter();
             if (document.getElementById('chat-body').innerHTML === "") {
                 addMessage("Halo! Saya Panda. Ada yang bisa saya bantu?", 'panda');
             }
@@ -101,6 +102,7 @@
 
         function closeChat() {
             document.getElementById('sound-close').play();
+            clearTimeout(typeTimer);
             const chat = document.getElementById('panda-chat');
             chat.classList.remove('open');
             chat.classList.add('closing');
@@ -131,7 +133,6 @@
             typing.className = 'bubble panda';
             typing.innerHTML = "<i>Panda sedang mengetik...</i>";
             document.getElementById('chat-body').appendChild(typing);
-            document.getElementById('chat-body').scrollTop = document.getElementById('chat-body').scrollHeight;
 
             try {
                 const url = `${GAS_URL}?question=${encodeURIComponent(val)}&userName=Pengunjung`;
