@@ -23,7 +23,12 @@
     <div id="chat-box"></div>
 
     <div class="input-area">
-      <input id="userInput" type="text" placeholder="Tulis pesan..." />
+      <input 
+        id="userInput" 
+        type="text" 
+        placeholder="Tulis pesan..." 
+        onkeydown="handleEnter(event)"
+      />
       <button onclick="sendMessage()">➤</button>
     </div>
 
@@ -32,9 +37,7 @@
   <!-- FLOATING PANDA BUTTON -->
   <div id="sipanda-float" onclick="toggleChat()">
 
-    <div id="panda-face">
-      🐼
-    </div>
+    <div id="panda-face">🐼</div>
 
     <div id="status-dot"></div>
 
