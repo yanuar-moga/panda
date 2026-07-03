@@ -12,8 +12,8 @@ function setState(state) {
   // safety check
   if (!face || !dot) return;
 
-  // reset anim class (kalau nanti mau upgrade animasi)
-  face.classList.remove("shake", "bounce", "sleeping");
+  // reset anim class
+  face.classList.remove("shake", "bounce", "sleeping", "pulse");
 
   switch (state) {
 
@@ -25,7 +25,7 @@ function setState(state) {
     case "thinking":
       face.innerText = "🤔";
       dot.style.background = "#ffb300";
-      face.classList.add("bounce");
+      face.classList.add("pulse");
       break;
 
     case "happy":
@@ -54,11 +54,25 @@ function setState(state) {
 }
 
 /* =========================
-   OPTIONAL: FUTURE HOOK
-   (untuk upgrade tahap 6 nanti)
+   OPTIONAL: GET STATE
 ========================= */
 function getPandaState() {
   return pandaState;
+}
+
+/* =========================
+   FUTURE: QUICK EMOTION TRIGGERS
+========================= */
+function happyPanda() {
+  setState("happy");
+}
+
+function sadPanda() {
+  setState("sad");
+}
+
+function thinkingPanda() {
+  setState("thinking");
 }
 
 /* =========================
@@ -66,3 +80,7 @@ function getPandaState() {
 ========================= */
 window.setState = setState;
 window.getPandaState = getPandaState;
+
+window.happyPanda = happyPanda;
+window.sadPanda = sadPanda;
+window.thinkingPanda = thinkingPanda;
