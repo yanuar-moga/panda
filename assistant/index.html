@@ -3,26 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIPANDA - Sistem Informasi Personal & Diagnostik Anak</title>
+    <title>SIPANDA - Sekolah</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div id="panda-container">
-        <button id="panda-btn">🐼</button>
+        <div class="panda-wrapper">
+            <span class="tooltip-text">Tanya SIPANDA</span>
+            <button id="panda-btn">
+                <span class="panda-face">🐼</span>
+            </button>
+        </div>
         
         <div id="chat-window" class="hidden">
             <div id="chat-header">
-                <span>SIPANDA 🐼</span>
+                <div class="header-title">
+                    <span class="header-panda">😄</span> SIPANDA Assistant
+                </div>
                 <button id="close-btn">×</button>
             </div>
             <div id="chat-messages">
                 <div class="msg bot">Halo! Saya SIPANDA. Ada yang bisa saya bantu terkait sekolah hari ini?</div>
             </div>
-            <div id="typing-indicator" class="hidden">SIPANDA sedang mengetik...</div>
+            <div id="typing-indicator" class="hidden">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
             <div class="input-area">
                 <input type="text" id="user-input" placeholder="Tulis pertanyaanmu...">
-                <button id="send-btn">Kirim</button>
+                <button id="send-btn">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                </button>
             </div>
         </div>
     </div>
