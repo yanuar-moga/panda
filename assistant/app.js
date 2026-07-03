@@ -1,8 +1,22 @@
+const API_URL = "https://script.google.com/macros/s/AKfycbz5phe5kCec9ipOW2OO1UzH4NW3j7cgdcY5rgS2dW9rjB2uEXwW3kf15X1arrXp4PMjKw/exec";
+
+let faqData = [];
 let chatOpen = false;
 
-/* =====================
-   TOGGLE CHAT
-===================== */
+/* =========================
+   LOAD DATABASE FROM SHEETS
+========================= */
+fetch(API_URL)
+  .then(res => res.json())
+  .then(data => {
+    faqData = data;
+    console.log("SIPANDA DB loaded:", faqData);
+  })
+  .catch(err => console.error("Load error:", err));
+
+/* =========================
+   TOGGLE CHAT PANEL
+========================= */
 function toggleChat() {
 
   const panel = document.getElementById("chat-panel");
@@ -18,9 +32,9 @@ function toggleChat() {
   }
 }
 
-/* =====================
+/* =========================
    SEND MESSAGE
-===================== */
+========================= */
 function sendMessage() {
 
   const input = document.getElementById("userInput");
@@ -41,38 +55,48 @@ function sendMessage() {
       addMessage(answer, "bot");
       setState("happy");
     } else {
-      addMessage("Maaf, saya belum menemukan informasi itu.", "bot");
+      addMessage("Maaf, saya belum menemukan informasi tersebut.", "bot");
       setState("sad");
     }
 
-  }, 600);
+  }, 500);
 }
 
-/* =====================
-   SIMPLE AI (LOCAL DB)
-===================== */
+/* =========================
+   SMART SEARCH ENGINE
+========================= */
 function getAnswer(text) {
-
-  const db = [
-    { q: "jam masuk", a: "Jam masuk pukul 07.00 WIB." },
-    { q: "ppdb", a: "Info PPDB ada di menu website sekolah." },
-    { q: "kepala sekolah", a: "Kepala SMPN 1 Moga adalah ..." }
-  ];
 
   text = text.toLowerCase();
 
-  for (let item of db) {
-    if (text.includes(item.q)) {
-      return item.a;
+  for (let item of faqData) {
+
+    if (!item) continue;
+
+    // PRIORITY 1: keyword
+    if (item.keyword) {
+
+      const keys = item.keyword.toLowerCase().split(";");
+
+      for (let k of keys) {
+        if (text.includes(k.trim())) {
+          return item.answer;
+        }
+      }
+    }
+
+    // PRIORITY 2: question match
+    if (item.question && text.includes(item.question.toLowerCase())) {
+      return item.answer;
     }
   }
 
   return null;
 }
 
-/* =====================
+/* =========================
    CHAT UI
-===================== */
+========================= */
 function addMessage(text, type) {
 
   const box = document.getElementById("chat-box");
