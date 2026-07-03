@@ -3,47 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANDA ASSISTANT</title>
+    <title>Panda Assistant</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div id="panda-container">
-        <div class="panda-wrapper">
-            <span class="tooltip-text">Tanya PANDA</span>
-            <button id="panda-btn">
-                <img src="https://yanuar-moga.github.io/panda/assistant/assets/mypanda.png" alt="PANDA" class="panda-logo">
-            </button>
+    <div id="panda-icon" onclick="toggleChat()">
+        <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" alt="Panda">
+    </div>
+
+    <div id="panda-chat" class="hidden">
+        <div class="header">
+            <div style="display:flex; align-items:center;">
+                <img src="https://yanuar-moga.github.io/app/sipanda/assets/logo_sipanda.png" style="width:30px; margin-right:10px;">
+                <span id="app-name"></span>
+            </div>
+            <button onclick="toggleChat()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold;">X</button>
         </div>
-        
-        <div id="chat-window" class="hidden">
-            <div id="chat-header">
-                <div class="header-title">
-                    <img src="https://yanuar-moga.github.io/panda/assistant/assets/mypanda.png" alt="Panda" class="header-logo"> 
-                    <span class="typewriter">PANDA ASSISTANT</span>
-                </div>
-                <button id="close-btn">×</button>
-            </div>
-            
-            <div id="chat-messages">
-                <div class="msg bot">Halo! Saya PANDA. Ada yang bisa saya bantu?</div>
-            </div>
-            
-            <div id="typing-indicator" class="hidden">
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-                <div class="typing-dot"></div>
-            </div>
-            
-            <div class="input-area">
-                <input type="text" id="user-input" placeholder="Tulis pertanyaanmu...">
-                <button id="send-btn">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
-                </button>
-            </div>
+        <div id="chat-body"></div>
+        <div id="input-area">
+            <input type="text" id="user-input" placeholder="Ketik pertanyaan..." onkeydown="handleEnter(event)">
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
