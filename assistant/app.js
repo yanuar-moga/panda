@@ -1,16 +1,32 @@
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz5phe5kCec9ipOW2OO1UzH4NW3j7cgdcY5rgS2dW9rjB2uEXwW3kf15X1arrXp4PMjKw/exec";
 let faqData = [];
 
+// Fetch data FAQ
 fetch(SCRIPT_URL).then(res => res.json()).then(data => faqData = data);
 
 const pandaBtn = document.getElementById('panda-btn');
 const chatWindow = document.getElementById('chat-window');
+const closeBtn = document.getElementById('close-btn');
 const input = document.getElementById('user-input');
 const msgBox = document.getElementById('chat-messages');
 const typing = document.getElementById('typing-indicator');
+const typewriterText = document.querySelector('.typewriter');
 
-pandaBtn.onclick = () => { chatWindow.classList.toggle('hidden'); pandaBtn.classList.toggle('hidden'); };
-document.getElementById('close-btn').onclick = () => { chatWindow.classList.toggle('hidden'); pandaBtn.classList.toggle('hidden'); };
+// Fungsi untuk menangani buka/tutup chat & animasi typewriter
+function toggleChat() {
+    chatWindow.classList.toggle('hidden');
+    pandaBtn.classList.toggle('hidden');
+
+    // Jika chat dibuka, restart animasi typewriter
+    if (!chatWindow.classList.contains('hidden')) {
+        typewriterText.style.animation = 'none';
+        void typewriterText.offsetWidth; // Trigger reflow untuk merestart
+        typewriterText.style.animation = 'typing 2s steps(20, end), blink-caret 0.75s step-end infinite';
+    }
+}
+
+pandaBtn.onclick = toggleChat;
+closeBtn.onclick = toggleChat;
 
 function sendMessage() {
     const text = input.value.trim();
@@ -19,11 +35,11 @@ function sendMessage() {
     addMsg(text, 'user');
     input.value = '';
     
-    const sapaan = ['hi', 'hai', 'hello', 'halo', 'hei', 'hey', 'pagi'];
+    const sapaan = ['hi', 'hai', 'hello', 'halo', 'hei', 'hey', 'pagi', 'siang', 'sore', 'malam'];
     if (sapaan.some(s => text.toLowerCase().includes(s))) {
         typing.classList.remove('hidden');
+        msgBox.scrollTop = msgBox.scrollHeight;
         setTimeout(() => {
-            typing.classList.remove('hidden');
             typing.classList.add('hidden');
             addMsg("Halo! Senang bertemu denganmu. Ada yang bisa saya bantu?", 'bot');
         }, 1000);
@@ -31,6 +47,8 @@ function sendMessage() {
     }
 
     typing.classList.remove('hidden');
+    msgBox.scrollTop = msgBox.scrollHeight;
+    
     setTimeout(() => {
         typing.classList.add('hidden');
         const found = faqData.find(item => {
