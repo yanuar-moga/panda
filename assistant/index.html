@@ -5,33 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panda Assistant</title>
     <style>
-        /* Animasi */
-        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        @keyframes turnOff { 0% { transform: scale(1, 1); filter: brightness(1); } 50% { transform: scale(1, 0.01); filter: brightness(2); } 100% { transform: scale(0, 0); filter: brightness(0); } }
-
-        /* Logo Icon */
+        /* [Style tetap sama seperti sebelumnya] */
         #panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999; }
         #panda-icon img { width: 70px; }
-        
-        /* Jendela Chat */
-        #panda-chat { 
-            position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; 
-            background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
-            display: flex; flex-direction: column; overflow: visible; z-index: 9999;
-            animation: slideUp 0.5s ease-out forwards;
-        }
+        #panda-chat { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: visible; z-index: 9999; }
         .hidden { display: none !important; }
-        .closing { animation: turnOff 0.4s ease-in forwards !important; }
-        
-        /* Header dengan Logo Utuh */
         .header { background: #4CAF50; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; position: relative; border-radius: 20px 20px 0 0; min-height: 50px; }
         .header-logo { width: 80px; height: auto; margin-right: 15px; margin-top: -50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
-        
         #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f0f2f5; display: flex; flex-direction: column; gap: 10px; }
         .bubble { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 14px; position: relative; word-wrap: break-word; }
         .panda { align-self: flex-start; background: white; border: 1px solid #ddd; border-bottom-left-radius: 2px; }
         .user { align-self: flex-end; background: #4CAF50; color: white; border-bottom-right-radius: 2px; }
-        
         #input-area { padding: 10px; background: white; border-top: 1px solid #ddd; border-radius: 0 0 20px 20px; }
         #user-input { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
     </style>
@@ -65,32 +49,37 @@
             const chat = document.getElementById('panda-chat');
             document.getElementById('panda-icon').style.display = 'none';
             chat.classList.remove('hidden');
-            chat.style.animation = 'slideUp 0.5s ease-out forwards';
-            
+
+            // 1. Trigger Typewriter setiap kali dibuka
             const el = document.getElementById('app-name');
             el.innerText = "";
             const text = "PANDA ASSISTANT";
             let i = 0;
-            function type() { if(i < text.length) { el.innerText += text.charAt(i); i++; setTimeout(type, 100); } }
+            function type() { 
+                if(i < text.length) { 
+                    el.innerText += text.charAt(i); 
+                    i++; 
+                    setTimeout(type, 100); 
+                } 
+            }
             type();
             
-            if (!localStorage.getItem('panda_user')) {
-                addMessage("Halo! Saya Panda. Siapa nama kamu?", 'panda');
-                isWaitingForName = true;
-            } else {
-                addMessage(`Halo ${localStorage.getItem('panda_user')}! Ada yang bisa dibantu?`, 'panda');
+            // 2. Cek apakah ini pertama kali user membuka (chat kosong)
+            const body = document.getElementById('chat-body');
+            if (body.innerHTML.trim() === "") {
+                if (!localStorage.getItem('panda_user')) {
+                    addMessage("Halo! Saya Panda. Siapa nama kamu?", 'panda');
+                    isWaitingForName = true;
+                } else {
+                    addMessage(`Halo ${localStorage.getItem('panda_user')}! Ada yang bisa dibantu?`, 'panda');
+                }
             }
             resetIdleTimer();
         }
 
         function closeChat() {
-            const chat = document.getElementById('panda-chat');
-            chat.classList.add('closing');
-            setTimeout(() => {
-                chat.classList.add('hidden');
-                chat.classList.remove('closing');
-                document.getElementById('panda-icon').style.display = 'block';
-            }, 400);
+            document.getElementById('panda-chat').classList.add('hidden');
+            document.getElementById('panda-icon').style.display = 'block';
             clearTimeout(idleTimer);
         }
 
@@ -98,6 +87,37 @@
             const body = document.getElementById('chat-body');
             body.innerHTML += `<div class="bubble ${sender}">${text}</div>`;
             body.scrollTop = body.scrollHeight;
+        }
+
+        async function handleChat(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('user-input');
+                const val = input.value.trim();
+                if (!val) return;
+                
+                resetIdleTimer();
+
+                if (isWaitingForName) {
+                    localStorage.setItem('panda_user', val);
+                    isWaitingForName = false;
+                    addMessage(val, 'user');
+                    addMessage(`Halo ${val}! Senang bertemu denganmu. Apa yang ingin ditanyakan?`, 'panda');
+                    input.value = '';
+                    return;
+                }
+
+                addMessage(val, 'user');
+                input.value = '';
+                
+                try {
+                    const res = await fetch(GAS_URL, { 
+                        method: 'POST', 
+                        body: JSON.stringify({ question: val, userName: localStorage.getItem('panda_user') }) 
+                    });
+                    const data = await res.json();
+                    addMessage(data.answer, 'panda');
+                } catch(err) { addMessage("Maaf, gangguan teknis.", 'panda'); }
+            }
         }
 
         function resetIdleTimer() {
@@ -111,32 +131,6 @@
                 const data = await res.json();
                 addMessage(`💡 <b>Tahukah kamu?</b><br>${data.trivia}`, 'panda');
             } catch(e) {}
-        }
-
-        async function handleChat(e) {
-            if (e.key === 'Enter') {
-                const input = document.getElementById('user-input');
-                const val = input.value;
-                if (!val) return;
-                resetIdleTimer();
-
-                if (isWaitingForName) {
-                    localStorage.setItem('panda_user', val);
-                    isWaitingForName = false;
-                    addMessage(`Halo ${val}! Senang bertemu denganmu. Apa yang bisa dibantu?`, 'panda');
-                    input.value = '';
-                    return;
-                }
-
-                addMessage(val, 'user');
-                input.value = '';
-                
-                try {
-                    const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ question: val, userName: localStorage.getItem('panda_user') }) });
-                    const data = await res.json();
-                    addMessage(data.answer, 'panda');
-                } catch(err) { addMessage("Maaf, gangguan teknis.", 'panda'); }
-            }
         }
     </script>
 </body>
