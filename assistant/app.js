@@ -23,8 +23,9 @@ function sendMessage() {
     if (sapaan.some(s => text.toLowerCase().includes(s))) {
         typing.classList.remove('hidden');
         setTimeout(() => {
+            typing.classList.remove('hidden');
             typing.classList.add('hidden');
-            addMsg("Halo! Senang bertemu denganmu. Ada yang bisa saya bantu hari ini?", 'bot');
+            addMsg("Halo! Senang bertemu denganmu. Ada yang bisa saya bantu?", 'bot');
         }, 1000);
         return;
     }
@@ -40,7 +41,7 @@ function sendMessage() {
         if (found) {
             addMsg(found.answer, 'bot');
         } else {
-            addMsg("Maaf, SIPANDA belum mengerti. Pertanyaanmu sudah saya catat untuk admin sekolah ya!", 'bot');
+            addMsg("Maaf, PANDA belum mengerti. Pertanyaanmu sudah saya catat untuk admin sekolah ya!", 'bot');
             saveUnanswered(text);
         }
     }, 1500);
