@@ -5,17 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panda Assistant</title>
     <style>
-        /* Logo Default */
+        /* Animasi */
+        @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes turnOff { 0% { transform: scale(1, 1); filter: brightness(1); } 50% { transform: scale(1, 0.01); filter: brightness(2); } 100% { transform: scale(0, 0); filter: brightness(0); } }
+
+        /* Logo Icon */
         #panda-icon { position: fixed; bottom: 20px; right: 20px; cursor: pointer; z-index: 9999; }
         #panda-icon img { width: 70px; }
         
         /* Jendela Chat */
-        #panda-chat { position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: visible; z-index: 9999; }
+        #panda-chat { 
+            position: fixed; bottom: 20px; right: 20px; width: 320px; height: 450px; 
+            background: white; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+            display: flex; flex-direction: column; overflow: visible; z-index: 9999;
+            animation: slideUp 0.5s ease-out forwards;
+        }
         .hidden { display: none !important; }
+        .closing { animation: turnOff 0.4s ease-in forwards !important; }
         
-        /* Header dengan Logo Keluar */
-        .header { background: #4CAF50; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; font-weight: bold; position: relative; border-radius: 20px 20px 0 0; }
-        .header-logo { width: 70px; height: 70px; margin-right: 15px; border-radius: 50%; border: 3px solid white; margin-top: -40px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); }
+        /* Header dengan Logo Utuh */
+        .header { background: #4CAF50; color: white; padding: 15px; display: flex; align-items: center; justify-content: space-between; position: relative; border-radius: 20px 20px 0 0; min-height: 50px; }
+        .header-logo { width: 80px; height: auto; margin-right: 15px; margin-top: -50px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
         
         #chat-body { flex: 1; padding: 15px; overflow-y: auto; background: #f0f2f5; display: flex; flex-direction: column; gap: 10px; }
         .bubble { padding: 10px 15px; border-radius: 15px; max-width: 80%; font-size: 14px; position: relative; word-wrap: break-word; }
@@ -36,9 +46,9 @@
         <div class="header">
             <div style="display:flex; align-items:center;">
                 <img src="https://yanuar-moga.github.io/panda/assistant/assets/mypanda.png" class="header-logo">
-                <span id="app-name"></span>
+                <span id="app-name" style="margin-top:-20px; font-weight:bold;"></span>
             </div>
-            <button onclick="closeChat()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold; margin-top:-30px;">X</button>
+            <button onclick="closeChat()" style="background:none; border:none; color:white; cursor:pointer; font-weight:bold; margin-top:-20px;">X</button>
         </div>
         <div id="chat-body"></div>
         <div id="input-area">
@@ -52,8 +62,10 @@
         let idleTimer;
 
         function openChat() {
+            const chat = document.getElementById('panda-chat');
             document.getElementById('panda-icon').style.display = 'none';
-            document.getElementById('panda-chat').classList.remove('hidden');
+            chat.classList.remove('hidden');
+            chat.style.animation = 'slideUp 0.5s ease-out forwards';
             
             const el = document.getElementById('app-name');
             el.innerText = "";
@@ -62,9 +74,8 @@
             function type() { if(i < text.length) { el.innerText += text.charAt(i); i++; setTimeout(type, 100); } }
             type();
             
-            // Cek apakah sudah kenal nama
             if (!localStorage.getItem('panda_user')) {
-                addMessage("Halo! Saya Panda. Sebelum kita lanjut, boleh tahu siapa nama kamu?", 'panda');
+                addMessage("Halo! Saya Panda. Siapa nama kamu?", 'panda');
                 isWaitingForName = true;
             } else {
                 addMessage(`Halo ${localStorage.getItem('panda_user')}! Ada yang bisa dibantu?`, 'panda');
@@ -73,8 +84,13 @@
         }
 
         function closeChat() {
-            document.getElementById('panda-chat').classList.add('hidden');
-            document.getElementById('panda-icon').style.display = 'block';
+            const chat = document.getElementById('panda-chat');
+            chat.classList.add('closing');
+            setTimeout(() => {
+                chat.classList.add('hidden');
+                chat.classList.remove('closing');
+                document.getElementById('panda-icon').style.display = 'block';
+            }, 400);
             clearTimeout(idleTimer);
         }
 
@@ -102,13 +118,12 @@
                 const input = document.getElementById('user-input');
                 const val = input.value;
                 if (!val) return;
-
                 resetIdleTimer();
 
                 if (isWaitingForName) {
                     localStorage.setItem('panda_user', val);
                     isWaitingForName = false;
-                    addMessage(`Halo ${val}! Senang bertemu denganmu. Apa yang ingin ditanyakan?`, 'panda');
+                    addMessage(`Halo ${val}! Senang bertemu denganmu. Apa yang bisa dibantu?`, 'panda');
                     input.value = '';
                     return;
                 }
@@ -117,15 +132,10 @@
                 input.value = '';
                 
                 try {
-                    const res = await fetch(GAS_URL, { 
-                        method: 'POST', 
-                        body: JSON.stringify({ question: val, userName: localStorage.getItem('panda_user') }) 
-                    });
+                    const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ question: val, userName: localStorage.getItem('panda_user') }) });
                     const data = await res.json();
                     addMessage(data.answer, 'panda');
-                } catch(err) {
-                    addMessage("Maaf, gangguan teknis.", 'panda');
-                }
+                } catch(err) { addMessage("Maaf, gangguan teknis.", 'panda'); }
             }
         }
     </script>
