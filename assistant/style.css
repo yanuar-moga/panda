@@ -20,46 +20,78 @@ body {
   flex-direction: column;
   overflow: hidden;
   z-index: 9999;
+
+  /* ✨ tambahan smooth open */
+  transform: scale(0.95);
+  opacity: 0;
+  transition: 0.2s ease;
+}
+
+#chat-panel:not(.hidden) {
+  transform: scale(1);
+  opacity: 1;
 }
 
 .hidden {
   display: none;
 }
 
+/* =====================
+   HEADER
+===================== */
 #chat-header {
-  background: #2e7d32;
+  background: linear-gradient(135deg, #2e7d32, #1b5e20);
   color: white;
   padding: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-weight: bold;
 }
 
+/* =====================
+   CHAT BOX
+===================== */
 #chat-box {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
   font-size: 13px;
+  background: #f9f9f9;
 }
 
 .msg {
   margin: 5px 0;
-  padding: 8px;
+  padding: 8px 10px;
   border-radius: 10px;
+  max-width: 80%;
+  word-wrap: break-word;
+  animation: pop 0.2s ease;
+}
+
+@keyframes pop {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .user {
   background: #dff5e1;
   text-align: right;
+  margin-left: auto;
 }
 
 .bot {
-  background: #f2f2f2;
+  background: #ffffff;
+  border: 1px solid #eee;
 }
 
+/* =====================
+   INPUT AREA
+===================== */
 .input-area {
   display: flex;
   border-top: 1px solid #ddd;
+  background: #fff;
 }
 
 .input-area input {
@@ -75,6 +107,11 @@ body {
   border: none;
   padding: 10px 15px;
   cursor: pointer;
+  transition: 0.2s;
+}
+
+.input-area button:hover {
+  background: #1b5e20;
 }
 
 /* =====================
@@ -94,20 +131,30 @@ body {
   align-items: center;
   cursor: pointer;
   z-index: 10000;
+
+  /* floating effect */
   animation: float 3s ease-in-out infinite;
+  transition: 0.2s;
 }
 
+#sipanda-float:hover {
+  transform: scale(1.08);
+}
+
+/* float animation */
 @keyframes float {
   0% { transform: translateY(0); }
   50% { transform: translateY(-8px); }
   100% { transform: translateY(0); }
 }
 
+/* panda face */
 #panda-face {
   font-size: 32px;
   transition: 0.3s;
 }
 
+/* status dot */
 #status-dot {
   position: absolute;
   bottom: 8px;
@@ -116,4 +163,5 @@ body {
   height: 10px;
   background: #4caf50;
   border-radius: 50%;
+  box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);
 }
