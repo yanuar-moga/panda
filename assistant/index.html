@@ -56,7 +56,6 @@
             document.getElementById('panda-icon').style.display = 'none';
             document.getElementById('panda-chat').classList.remove('hidden');
             
-            // Loop Typewriter
             const el = document.getElementById('app-name');
             let text = "PANDA ASSISTANT   ";
             let i = 0;
@@ -109,24 +108,35 @@
             body.scrollTop = body.scrollHeight;
 
             try {
-                await new Promise(r => setTimeout(r, 1000));
-                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ question: val, userName: localStorage.getItem('panda_user') }) });
+                const payload = { 
+                    question: val, 
+                    userName: localStorage.getItem('panda_user') || "Pengunjung",
+                    sessionId: "user_" + Date.now() 
+                };
+
+                const res = await fetch(GAS_URL, { 
+                    method: 'POST', 
+                    body: JSON.stringify(payload) 
+                });
                 const data = await res.json();
+                
                 typing.remove();
                 addMessage(data.answer, 'panda');
             } catch(err) {
                 typing.remove();
-                addMessage("Maaf, gangguan teknis.", 'panda');
+                addMessage("Maaf, sepertinya Panda sedang gangguan.", 'panda');
             }
         }
 
         function resetIdleTimer() {
             clearTimeout(idleTimer);
             idleTimer = setTimeout(async () => {
-                const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ question: "trivia_only" }) });
-                const data = await res.json();
-                addMessage(`💡 <b>Tahukah kamu?</b><br>${data.trivia}`, 'panda');
-            }, 300000); // 5 menit
+                try {
+                    const res = await fetch(GAS_URL, { method: 'POST', body: JSON.stringify({ question: "trivia_only" }) });
+                    const data = await res.json();
+                    if(data.trivia) addMessage(`💡 <b>Tahukah kamu?</b><br>${data.trivia}`, 'panda');
+                } catch(e) {}
+            }, 300000); 
         }
 
         function closeChat() {
