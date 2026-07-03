@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>SIPANDA Assistant</title>
+  <title>PANDA Assistant</title>
 
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,44 +14,47 @@
 
   <div class="container">
 
-<div id="panda-area">
+    <!-- PANDA AREA -->
+    <div id="panda-area">
 
-  <svg id="panda" width="180" height="180" viewBox="0 0 200 200">
+      <svg id="panda" width="180" height="180" viewBox="0 0 200 200">
 
-    <!-- KEPALA -->
-    <circle cx="100" cy="100" r="70" fill="#fff" stroke="#000" stroke-width="4"/>
+        <!-- KEPALA -->
+        <circle cx="100" cy="100" r="70" fill="#fff" stroke="#000" stroke-width="4"/>
 
-    <!-- TELINGA -->
-    <circle cx="45" cy="45" r="20" fill="#000"/>
-    <circle cx="155" cy="45" r="20" fill="#000"/>
+        <!-- TELINGA -->
+        <circle cx="45" cy="45" r="20" fill="#000"/>
+        <circle cx="155" cy="45" r="20" fill="#000"/>
 
-    <!-- MATA KIRI -->
-    <ellipse id="eyeL" cx="75" cy="90" rx="10" ry="15" fill="#000"/>
+        <!-- MATA -->
+        <ellipse id="eyeL" cx="75" cy="90" rx="10" ry="15" fill="#000"/>
+        <ellipse id="eyeR" cx="125" cy="90" rx="10" ry="15" fill="#000"/>
 
-    <!-- MATA KANAN -->
-    <ellipse id="eyeR" cx="125" cy="90" rx="10" ry="15" fill="#000"/>
+        <!-- PUPIL (WAJIB untuk eye tracking) -->
+        <circle id="pupilL" cx="75" cy="92" r="4" fill="#fff"/>
+        <circle id="pupilR" cx="125" cy="92" r="4" fill="#fff"/>
 
-    <!-- PUPIL -->
-    <circle id="pupilL" cx="75" cy="92" r="4" fill="#fff"/>
-    <circle id="pupilR" cx="125" cy="92" r="4" fill="#fff"/>
+        <!-- MULUT -->
+        <path id="mouth"
+          d="M80 120 Q100 140 120 120"
+          stroke="#000"
+          stroke-width="4"
+          fill="none"
+          stroke-linecap="round"/>
 
-    <!-- MULUT -->
-    <path id="mouth"
-      d="M80 120 Q100 140 120 120"
-      stroke="#000"
-      stroke-width="4"
-      fill="none"
-      stroke-linecap="round"/>
+      </svg>
 
-  </svg>
+    </div>
 
-</div>
+    <!-- TITLE -->
+    <h2>PANDA Assistant</h2>
 
-    <h2>SIPANDA Assistant</h2>
-    <p id="status">Memuat...</p>
+    <!-- STATUS TEXT -->
+    <p id="status">Memuat PANDA...</p>
 
   </div>
 
+  <!-- SCRIPTS -->
   <script src="panda.js"></script>
   <script src="app.js"></script>
 
