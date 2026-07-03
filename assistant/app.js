@@ -1,129 +1,56 @@
-const API_URL = "https://script.google.com/macros/s/AKfycbz5phe5kCec9ipOW2OO1UzH4NW3j7cgdcY5rgS2dW9rjB2uEXwW3kf15X1arrXp4PMjKw/exec";
-
+const SCRIPT_URL = "YOUR_GAS_URL"; // Ganti dengan URL Web App Anda
 let faqData = [];
-let chatOpen = false;
 
-/* =========================
-   LOAD DATABASE FROM SHEETS
-========================= */
-async function loadData() {
-  try {
-    const res = await fetch(API_URL);
-    faqData = await res.json();
-    console.log("SIPANDA DB loaded:", faqData);
-  } catch (err) {
-    console.error("Load error:", err);
-  }
-}
+// Fetch data saat halaman dimuat
+fetch(SCRIPT_URL)
+    .then(res => res.json())
+    .then(data => { faqData = data; });
 
-loadData();
+const pandaBtn = document.getElementById('panda-btn');
+const chatWindow = document.getElementById('chat-window');
+const closeBtn = document.getElementById('close-btn');
+const input = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const msgBox = document.getElementById('chat-messages');
+const typing = document.getElementById('typing-indicator');
 
-/* =========================
-   TOGGLE CHAT PANEL
-   (FIX: panda hilang saat open)
-========================= */
 function toggleChat() {
-
-  const panel = document.getElementById("chat-panel");
-  const panda = document.getElementById("sipanda-float");
-
-  chatOpen = !chatOpen;
-
-  if (chatOpen) {
-    panel.classList.remove("hidden");
-    panda.classList.add("hidden"); // 🐼 HILANG saat chat terbuka
-    setState("happy");
-  } else {
-    panel.classList.add("hidden");
-    panda.classList.remove("hidden"); // 🐼 MUNCUL lagi
-    setState("idle");
-  }
+    chatWindow.classList.toggle('hidden');
+    pandaBtn.classList.toggle('hidden');
 }
 
-/* =========================
-   ENTER HANDLER
-   (FIX: auto send message)
-========================= */
-function handleEnter(event) {
-  if (event.key === "Enter") {
-    event.preventDefault();
-    sendMessage();
-  }
-}
+pandaBtn.onclick = toggleChat;
+closeBtn.onclick = toggleChat;
 
-/* =========================
-   SEND MESSAGE
-========================= */
 function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+    
+    addMsg(text, 'user');
+    input.value = '';
+    
+    typing.classList.remove('hidden');
+    msgBox.scrollTop = msgBox.scrollHeight;
 
-  const input = document.getElementById("userInput");
-  const text = input.value.trim();
-
-  if (!text) return;
-
-  addMessage(text, "user");
-  input.value = "";
-
-  setState("thinking");
-
-  setTimeout(() => {
-
-    const answer = getAnswer(text);
-
-    if (answer) {
-      addMessage(answer, "bot");
-      setState("happy");
-    } else {
-      addMessage("Maaf, saya belum menemukan informasi tersebut.", "bot");
-      setState("sad");
-    }
-
-  }, 500);
+    setTimeout(() => {
+        typing.classList.add('hidden');
+        const found = faqData.find(item => {
+            const keys = item.keyword ? item.keyword.split(',').map(k => k.trim().toLowerCase()) : [];
+            return keys.includes(text.toLowerCase()) || 
+                   (item.question && item.question.toLowerCase().includes(text.toLowerCase()));
+        });
+        
+        addMsg(found ? found.answer : "Maaf, SIPANDA belum tahu jawabannya. Coba tanya hal lain!", 'bot');
+        msgBox.scrollTop = msgBox.scrollHeight;
+    }, 1200);
 }
 
-/* =========================
-   SMART SEARCH ENGINE
-========================= */
-function getAnswer(text) {
-
-  text = text.toLowerCase();
-
-  for (let item of faqData) {
-
-    if (!item) continue;
-
-    // PRIORITY 1: keyword match
-    if (item.keyword) {
-
-      const keys = item.keyword.toLowerCase().split(";");
-
-      for (let k of keys) {
-        if (text.includes(k.trim())) {
-          return item.answer;
-        }
-      }
-    }
-
-    // PRIORITY 2: question match
-    if (item.question && text.includes(item.question.toLowerCase())) {
-      return item.answer;
-    }
-  }
-
-  return null;
+function addMsg(text, sender) {
+    const div = document.createElement('div');
+    div.className = `msg ${sender}`;
+    div.innerText = text;
+    msgBox.appendChild(div);
 }
 
-/* =========================
-   CHAT UI RENDER
-========================= */
-function addMessage(text, type) {
-
-  const box = document.getElementById("chat-box");
-
-  const div = document.createElement("div");
-  div.classList.add("msg", type);
-  div.innerText = text;
-
-  box.appendChild(div);
-  box.scrollTop = box.scrollHeight;
-}
+sendBtn.onclick = sendMessage;
+input.onkeypress = (e) => { if(e.key === 'Enter') sendMessage(); };
